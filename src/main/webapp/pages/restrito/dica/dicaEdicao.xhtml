@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id ="dialogDicaEdicao" header="#{msg.dica_edicao}" widgetVar="alteracaoDica"
+              showEffect="slide" hideEffect="slide">
+        <h:panelGrid id ="gridDicaAltera" columns ="6" cellspacing="10">
+            <h:outputLabel value ="*#{msg.dica_titulo}"/>
+            <p:inputText id ="tituloDicaAltera" value ="#{dicaNavegacao.dica.titulo}" required ="true">
+                <f:validateLength minimum="2" maximum="25"/>
+            </p:inputText>
+            <p:message for = "tituloDicaAltera" display="icon"/>
+
+            <h:outputLabel value ="#{msg.dica_autor}" for ="autorDicaAltera"/>
+            <p:inputText id ="autorDicaAltera" value ="#{dicaNavegacao.dica.autor}" maxlength="50"/>
+            <p:message for ="autorDicaAltera" display="icon"/>
+
+            <h:outputLabel value ="*#{msg.dica_texto}"/>
+            <h:panelGrid columns = "1">
+                <p:inputTextarea id="textoDicaAltera" rows="10" cols="50" 
+                                 value="#{dicaNavegacao.dica.texto}"
+                                 counter="counterTextoDicaAltera" maxlength="2000"       
+                                 counterTemplate="{0} #{msg.mensagem_texto_area}" autoResize="false" required ="true"/>  
+                <h:outputText id="counterTextoDicaAltera" />
+            </h:panelGrid>  
+            <p:message for ="textoDicaAltera" display ="icon"/>
+
+            <h:outputLabel value ="*#{msg.dica_idioma}"/>
+            <p:selectOneMenu id ="idiomaDicaAltera" value ="#{dicaNavegacao.idiomaItemSelecinado}" required ="true">
+                <f:selectItem itemValue ="0" itemLabel =""/>
+                <f:selectItems value ="#{dicaNavegacao.idiomasItem}"/>
+            </p:selectOneMenu>
+            <p:message for ="idiomaDicaAltera" display="icon"/>
+
+            <h:outputLabel value ="*#{msg.dica_categoria}"/>
+
+            <p:selectOneMenu id ="categoriaDicaAltera" value ="#{dicaNavegacao.categoriaItemSelecionado}" required ="true">
+                <f:selectItem itemValue ="0" itemLabel=""/>
+                <f:selectItems value ="#{dicaNavegacao.categoriasItem}"/>
+            </p:selectOneMenu>
+            <p:message for ="categoriaDicaAltera" display="icon"/>
+
+            <h:outputLabel/>
+            <h:outputLabel/>
+            <h:outputLabel/>
+
+            <p:commandButton value ="#{msg.botao_cancelar}" process ="@this" onclick ="alteracaoDica.hide()"/>
+            <p:commandButton value ="#{msg.botao_salvar}" actionListener ="#{dicaNavegacaoControle.alterar}"
+                             process ="gridDicaAltera" update =":formPrincipal:tabelaDicas" oncomplete="alteracaoDica.hide()"/>
+        </h:panelGrid>
+    </p:dialog>
+
+    <p:dialog id="excluiDicaDialog" showEffect="slide" hideEffect="slide"
+              header="#{msg.dica_apagar}" widgetVar="exclusaoDica">
+
+
+        <h:outputLabel value ="#{msg.dica_msg_confirma_exclusao}?"/>
+        <br/>
+        <h:panelGrid id ="gridDicaApaga" columns="2">
+            <p:commandButton id="declineDicaExclusao"  value="#{msg.botao_cancelar}" type="button"
+                             process ="@this" onclick="exclusaoDica.hide()" ajax ="true"/>
+
+            <p:commandButton id="confirmDicaExclusao" process ="@this" ajax ="true"
+                             actionListener="#{dicaNavegacaoControle.apagar}" value="#{msg.botao_sim}"
+                             update=":formPrincipal:gridDicaPrincipal" oncomplete="exclusaoDica.hide()" >
+
+            </p:commandButton>
+        </h:panelGrid>
+    </p:dialog>
+
+</ui:composition>

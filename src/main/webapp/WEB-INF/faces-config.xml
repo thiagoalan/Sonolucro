@@ -1,0 +1,190 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<faces-config version="2.1"
+              xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
+
+    <application>
+        <resource-bundle>
+            <base-name>com.financeiro.sonolucro.idioma.mensagens</base-name>
+            <var>msg</var>
+        </resource-bundle>
+         <locale-config>
+            <default-locale>pt_BR</default-locale>
+            <supported-locale>pt_BR</supported-locale>
+            <supported-locale>en_US</supported-locale>
+        </locale-config>
+        
+        <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+    </application>
+	
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>login</from-outcome>
+            <to-view-id>/pages/publico/login.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+	
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>cadastro</from-outcome>
+            <to-view-id>/pages/publico/cadastroUsuario.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+	
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>principal</from-outcome>
+            <to-view-id>/pages/restrito/principal.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+	
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>grupo</from-outcome>
+            <to-view-id>/pages/restrito/grupo/grupo.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+	
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>conta</from-outcome>
+            <to-view-id>/pages/restrito/conta/conta.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+	
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>usuario</from-outcome>
+            <to-view-id>/pages/restrito/usuario/usuario.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>usuarioPesquisa</from-outcome>
+            <to-view-id>/pages/restrito/usuario/usuarioPesquisa.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>usuarioPesquisaEdicao</from-outcome>
+            <to-view-id>/pages/restrito/usuario/usuarioPesquisaEdicao.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+	
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>relatorios</from-outcome>
+            <to-view-id>/pages/restrito/movimentacao/relatorios.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+        
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>cartao</from-outcome>
+            <to-view-id>/pages/restrito/cartao/cartao.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+        
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>graficoConta</from-outcome>
+            <to-view-id>/pages/restrito/conta/graficoConta.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+        
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>movimentacao</from-outcome>
+            <to-view-id>/pages/restrito/movimentacao/movimentacao.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+        
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>graficoMovimentacao</from-outcome>
+            <to-view-id>/pages/restrito/movimentacao/graficoMovimentacao.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+	   
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>dica</from-outcome>
+            <to-view-id>/pages/restrito/dica/dica.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>empresa</from-outcome>
+            <to-view-id>/pages/restrito/empresa/empresa/empresa.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>empresaEdicao</from-outcome>
+            <to-view-id>/pages/restrito/empresa/empresa/empresaEdicao.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>responsavelEmpresa</from-outcome>
+            <to-view-id>/pages/restrito/empresa/responsavelEmpresa/responsavelEmpresa.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>localidadeComercial</from-outcome>
+            <to-view-id>/pages/restrito/empresa/localidadeComercial/localidadeComercial.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>localidadeComercialEdicao</from-outcome>
+            <to-view-id>/pages/restrito/empresa/localidadeComercial/localidadeComercialEdicao.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>objetivo</from-outcome>
+            <to-view-id>/pages/restrito/objetivo/objetivo.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>objetivoEdicao</from-outcome>
+            <to-view-id>/pages/restrito/objetivo/objetivoEdicao.xhtml</to-view-id>
+        </navigation-case>
+    </navigation-rule>
+        
+</faces-config>

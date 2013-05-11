@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id ="dialogResponsavelEmpresa" 
+              header="#{msg.empresa_pessoa_responsavel}"
+              widgetVar="modalResponsavelEmpresa" >
+
+        <p:dataTable id = "tabelaPesquisaResponsavelEmpresa" 
+                     value ="#{empresaNavegacao.responsaveis}" var ="responsavel" 
+                     rows ="10" paginator="true" pageLinks="3"   
+                     selection="#{empresaNavegacao.responsaveisSelecionados}" 
+                     rowKey="#{responsavel.id}" emptyMessage="#{msg.tabela_msg_vazia}">
+            
+            <p:ajax event ="rowSelectCheckbox" update =":formPrincipal:dataGridResponsaveisEmpresa#{empresaNavegacao.tela}" 
+                    process="@this"/>
+            <p:ajax event ="rowUnselectCheckbox" update =":formPrincipal:dataGridResponsaveisEmpresa#{empresaNavegacao.tela}" 
+                    process="@this" />
+            <p:ajax event ="toggleSelect" update =":formPrincipal:dataGridResponsaveisEmpresa#{empresaNavegacao.tela}" 
+                    process="@this"/>
+            
+            
+            <p:column selectionMode="multiple" >
+            </p:column>
+            <p:column headerText="ID" filterBy="#{responsavel.id}" >
+                <h:outputText value ="#{responsavel.id}"/>
+            </p:column>
+
+            <p:column headerText="#{msg.usuario_nome}" filterBy="#{responsavel.nome}" >
+                <h:outputText value ="#{responsavel.nome}"/>
+            </p:column>
+
+            <p:column headerText="#{msg.usuario_sobrenome}" filterBy ="#{responsavel.sobrenome}">
+                <h:outputText value ="#{responsavel.sobrenome}"/>
+            </p:column>
+
+            <p:column headerText="#{msg.usuario_email}" filterBy ="#{responsavel.email}" >
+                <h:outputText value ="#{responsavel.email}"/>
+            </p:column>
+
+            <p:column headerText ="#{msg.usuario_cpf}" filterBy ="#{responsavel.cpf}" >
+                <h:outputText value ="#{responsavel.cpf}"/>
+            </p:column>
+
+        </p:dataTable>
+
+    </p:dialog>
+
+</ui:composition>

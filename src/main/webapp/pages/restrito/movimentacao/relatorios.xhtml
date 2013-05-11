@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/sonolucroTemplateInterno.xhtml">
+
+    <ui:define name="corpo">
+
+        <p:fieldset id ="fieldsetRelatorio" legend="#{msg.relatorio_titulo_relatorio}" toggleSpeed="500" toggleable="true">
+            <h:outputLabel value ="Em desenvolvimento" style ="font-size: 18px; font-family: cursive"/>
+        <!--
+        <p:panel  styleClass="corpoPane">
+            <f:facet name="header">
+                <center>
+                    <h:outputLabel styleClass="outputTitulo" value="Só No Lucro" />
+                </center>
+            </f:facet>
+            <ui:include src="/pages/restrito/menu-sonolucro.xhtml" />
+
+            <br />
+
+            <p:panel header="#{msg.relatorio_titulo_relatorio}">
+
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{msg.relatorio_data_inicial}"
+                                   for="dataInicial" />
+                    <p:calendar id="dataInicial" pattern="dd/MM/yyyy"
+                                value="#{relatorioNavegacao.dataInicialMovimentacao}"
+                                required="true" />
+
+                    <h:outputLabel value="#{msg.relatorio_data_final}" for="dataFinal" />
+                    <p:calendar id="dataFinal" pattern="dd/MM/yyyy"
+                                value="#{relatorioNavegacao.dataFinalMovimentacao}"
+                                required="true" />
+
+                    <h:outputLabel value="#{msg.relatorio_tipo_relatorio}" for="tipo" />
+                    <p:selectOneMenu id="tipo"
+                                     value="#{relatorioNavegacao.tipoRelatorio}">
+                        <f:selectItem itemValue="1" itemLabel="Pdf" />
+                        <f:selectItem itemValue="2" itemLabel="Excell" />
+                        <f:selectItem itemValue="3" itemLabel="Html" />
+                        <f:selectItem itemValue="4" itemLabel="Planilha Open Office" />
+                    </p:selectOneMenu>
+
+                    <p:commandButton id="downloadLink"
+                                     action="#{relatorioNavegacaoControle.processaArquivo}"
+                                     value="#{msg.relatorio_download_relatorio}" ajax="false"
+                                     onclick="PrimeFaces.monitorDownload(start, stop)"
+                                     icon="ui-icon-arrowthichk-s">
+                        <p:fileDownload value="#{relatorioNavegacao.arquivo}" />
+                    </p:commandButton>
+                </h:panelGrid>
+            </p:panel>
+        </p:panel>
+-->
+        </p:fieldset>
+    </ui:define>
+</ui:composition>

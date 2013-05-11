@@ -1,0 +1,143 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <p:dataTable id="tabelaMovimentacoes"
+                 value="#{movimentacaoNavegacao.movimentacoes}" var="mov"
+                 paginator="true" rows="12" styleClass="tabelaPadrao" emptyMessage="#{msg.tabela_msg_vazia}">
+        <f:facet name="header">#{msg.movimentacao_tabela_movimentacoes}</f:facet>
+
+        <f:facet name="header">
+            <h:panelGrid id ="gridPesquisaMovimentacao" columns="5">
+                <h:outputLabel value="#{msg.movimentacao_msg_pesquisa_apartir}" />
+                <p:calendar pattern="dd/MM/yyyy" 
+                            value="#{movimentacaoNavegacao.dataInicial}" required="true" />
+
+                <h:outputLabel value="#{msg.movimentacao_msg_pesquisa_ate}" />
+                <p:calendar pattern="dd/MM/yyyy" 
+                            value="#{movimentacaoNavegacao.dataFinal}" required="true" />
+                <p:commandButton
+                    actionListener="#{movimentacaoNavegacaoControle.pesquisar}"
+                    process ="gridPesquisaMovimentacao" value="#{msg.botao_pesquisar}" 
+                    ajax="true" update=":formPrincipal:tabelaMovimentacoes" />
+            </h:panelGrid>
+        </f:facet>
+
+        <p:column style="text-align: center;">
+            <f:facet name="header">#{msg.movimentacao_tabela_coluna_data_vencimento}</f:facet>
+
+            <p:commandLink
+                actionListener="#{movimentacaoNavegacaoControle.preparaAlteracao}" process ="@this"
+                oncomplete = "visualizacaoMovimentacao.show()"  update=":formPrincipal:gridMovimentacaoVisualizacao">
+
+                <f:attribute name = "mov" value="#{mov}"/>
+
+                <h:outputLabel value="#{mov.dataVencimento}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                </h:outputLabel>
+            </p:commandLink>
+        </p:column>
+
+        <p:column style="text-align: center;" filterBy="#{mov.conta.nome}">
+            <f:facet name="header">#{msg.movimentacao_tabela_coluna_conta}</f:facet>
+
+            <p:commandLink
+                actionListener="#{movimentacaoNavegacaoControle.preparaAlteracao}" process ="@this"
+                oncomplete = "visualizacaoMovimentacao.show()"  update=":formPrincipal:gridMovimentacaoVisualizacao">
+
+                <f:attribute name = "mov" value="#{mov}"/>
+
+                <h:outputLabel value="#{mov.conta.nome}" />
+            </p:commandLink>
+        </p:column>
+
+        <p:column style="text-align: center;">
+            <f:facet name="header">#{msg.movimentacao_tabela_coluna_credito}</f:facet>
+            <p:commandLink
+                actionListener="#{movimentacaoNavegacaoControle.preparaAlteracao}" process ="@this"
+                oncomplete = "visualizacaoMovimentacao.show()"  update=":formPrincipal:gridMovimentacaoVisualizacao">
+
+                <f:attribute name = "mov" value="#{mov}"/>
+
+                <h:outputLabel value="#{mov.credito}">
+                    <f:convertNumber maxFractionDigits="2" type="currency"/>
+                </h:outputLabel>
+            </p:commandLink>
+        </p:column>
+
+        <p:column style="text-align: center;">
+            <f:facet name="header">#{msg.movimentacao_tabela_coluna_debito}</f:facet>
+            <p:commandLink
+                actionListener="#{movimentacaoNavegacaoControle.preparaAlteracao}" process ="@this"
+                oncomplete = "visualizacaoMovimentacao.show()"  update=":formPrincipal:gridMovimentacaoVisualizacao">
+
+                <f:attribute name = "mov" value="#{mov}"/>
+
+                <h:outputLabel value="#{mov.debito}">
+                    <f:convertNumber maxFractionDigits="2" type="currency"/>
+                </h:outputLabel>
+            </p:commandLink>
+        </p:column>
+
+        <p:column style="text-align: center;">
+            <f:facet name="header">#{msg.movimentacao_tabela_coluna_saldo}</f:facet>
+
+            <p:commandLink
+                actionListener="#{movimentacaoNavegacaoControle.preparaAlteracao}" process ="@this"
+                oncomplete = "visualizacaoMovimentacao.show()"  update=":formPrincipal:gridMovimentacaoVisualizacao" >
+
+                <f:attribute name = "mov" value="#{mov}"/>
+
+                <h:outputLabel value="#{mov.saldo}">
+                    <f:convertNumber maxFractionDigits="2" type="currency"/>
+                </h:outputLabel>
+            </p:commandLink>
+        </p:column>
+
+        <p:column style="text-align: center;">
+            <f:facet name="header">#{msg.movimentacao_tabela_coluna_sequencia}</f:facet>
+
+            <p:commandLink
+                actionListener="#{movimentacaoNavegacaoControle.preparaAlteracao}" process ="@this"
+                oncomplete = "visualizacaoMovimentacao.show()"  update=":formPrincipal:gridMovimentacaoVisualizacao">
+
+                <f:attribute  name = "mov" value="#{mov}"/>
+
+                <h:outputLabel value="#{mov.sequencia}" />
+            </p:commandLink>
+        </p:column>
+
+        <p:column style="text-align: center;" exportable="false">
+            <f:facet name="header">#{msg.tabela_coluna_editar}</f:facet>
+            <p:commandLink
+                actionListener="#{movimentacaoNavegacaoControle.preparaAlteracao}"
+                oncomplete="alteracaoMovimentacao.show()"  update=":formPrincipal:gridMovimentacaoAltera"
+                process ="@this">
+
+                <f:attribute name = "mov" value="#{mov}"/>
+
+                <h:graphicImage library="imagens" name="editar.jpg"
+                                width="15px" height="15px" />
+
+            </p:commandLink>
+        </p:column>
+
+        <p:column style="text-align: center;" exportable="false">
+            <f:facet name="header">#{msg.tabela_coluna_apagar}</f:facet>
+            <p:commandLink
+                actionListener="#{movimentacaoNavegacaoControle.preparaAlteracao}"
+                oncomplete="exclusaoMovimentacao.show()"  update=":formPrincipal:gridMovimentacaoApaga"
+                process ="@this">
+
+                <f:attribute name = "mov" value="#{mov}"/>
+
+                <h:graphicImage library="imagens" name="excluir.jpg"
+                                width="15px" height="15px" />
+            </p:commandLink>
+        </p:column>
+  
+    </p:dataTable>
+</ui:composition>

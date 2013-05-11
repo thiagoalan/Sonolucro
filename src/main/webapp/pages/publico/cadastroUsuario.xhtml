@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding='utf-8'?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/sonolucroTemplateExterno.xhtml">
+
+    <ui:define name="titulo" />
+
+    
+            <ui:define name="corpo">
+                <p:panel header = "#{msg.cadastro_usuario}" styleClass="corpoPane">
+                    <p:messages id="messageCadastroUsuario" autoUpdate="true" closable="true"  severity="info, error"/> 
+
+                    <h:form id="formCadastro">
+
+                        <h:panelGrid columns="3" styleClass="titulo">
+                            <h:outputLabel value="*#{msg.usuario_nome}" for="nome" />
+                            <p:inputText id="nome" value="#{usuarioNavegacao.usuarioCadastro.nome}"
+                                         required="true" validatorMessage="Qual o seu nome?">
+                                <f:validateLength minimum="4" maximum="30" />
+                            </p:inputText>
+                            <p:message for="nome" display="icon" />
+
+                            <h:outputLabel value="*#{msg.usuario_sobrenome}" for="sobrenome" />
+                            <p:inputText id="sobrenome" value="#{usuarioNavegacao.usuarioCadastro.sobrenome}"
+                                         required="true" >
+                                <f:validateLength minimum="4" maximum="30" />
+                            </p:inputText>
+                            <p:message for="sobrenome" display="icon"/>
+
+                            <h:outputLabel value="*#{msg.usuario_email}" for="email" />
+                            <p:inputText id="email" value="#{usuarioNavegacao.usuarioCadastro.email}"
+                                         required="true" validatorMessage="e-Mail inválido">
+                                <f:validateRegex pattern="[a-zA-Z0-9\-\_\.]+@[a-zA-Z0-9\-\_\.]+" />
+                            </p:inputText>
+                            <p:message for="email" />
+
+                            <h:outputLabel value="*#{msg.usuario_data_nascimento}" for="dataNascimento" />
+                            <p:calendar id="dataNascimento" pattern="dd/MM/yyyy"
+                                        value="#{usuarioNavegacao.usuarioCadastro.dataNascimento}"
+                                        navigator="true" required="true" />
+                            <p:message for="dataNascimento" />
+
+                            <h:outputLabel for="sexo" value="*#{msg.usuario_sexo}" />
+                            <p:selectOneMenu id="sexo"
+                                             value="#{usuarioNavegacao.sexoItemSelecionado}" required="true">
+                                <f:selectItem itemLabel="" itemValue=""/>
+                                <f:selectItems value ="#{usuarioNavegacao.sexosItem}"/>
+                            </p:selectOneMenu>
+                            <p:message for="sexo" />
+
+                            <h:outputLabel value="*#{msg.usuario_idioma}" for="idioma" />
+                            <p:selectOneMenu id="idioma"
+                                             value="#{usuarioNavegacao.idiomaItemSelecionado}" required="true">
+                                <f:selectItem itemLabel="" itemValue=""/>
+                                <f:selectItems value ="#{usuarioNavegacao.idiomasItem}"/>
+                            </p:selectOneMenu>
+                            <p:message for="idioma" />
+
+                            <h:outputLabel for="senha" value="*#{msg.usuario_senha}" />
+                            <p:password id="senha" feedback="true" match="confirmaSenha"
+                                        value="#{usuarioNavegacao.usuarioCadastro.senha}" required="true" />
+                            <p:message for="senha" />
+
+                            <h:outputLabel for="confirmaSenha" value="*#{msg.usuario_confirma_senha}" />
+                            <p:password id="confirmaSenha"
+                                        value="#{usuarioNavegacao.usuarioCadastro.senha}" required="true" />
+                            <p:message for="confirmaSenha" />
+
+
+                            <h:outputLabel value="" />
+                            <h:panelGrid columns = "2">
+                                <p:commandButton action = "#{usuarioNavegacaoControle.irParaTelaDeLogin}" value = "#{msg.botao_voltar}"
+                                                 process="@this"/>
+                                <p:commandButton actionListener="#{usuarioNavegacaoControle.salvar}"
+                                                 value="#{msg.botao_salvar}" />
+                            </h:panelGrid>
+
+                        </h:panelGrid>
+
+                    </h:form>
+                </p:panel>
+            </ui:define>
+</ui:composition>

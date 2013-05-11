@@ -1,0 +1,131 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/sonolucroTemplateInterno.xhtml">
+
+    <ui:define name="corpo">
+        <h:form id ="formPrincipal">
+            <h:panelGrid id ="gridCartaoPrincipal" columns ="1" style ="width:100%">
+
+                <p:fieldset id ="fieldsetCartao" legend="#{msg.cartao_cadastro_cartao}" toggleable="true" toggleSpeed="500" >
+
+                    <p:messages id ="messageCadastroCartao" autoUpdate="true" severity="info, error" closable="true"/>
+
+                    <h:panelGrid id="gridCartaoCadastro" columns="6" cellpadding="10">
+
+                        <h:outputLabel value="*#{msg.cartao_nome}" for="nomeCartao"/>
+                        <p:inputText id="nomeCartao" value="#{cartaoNavegacao.cartao.nome}" required ="true" >
+                            <f:validateLength minimum="3" maximum="25"/>
+                        </p:inputText>
+                        <p:message for = "nomeCartao" display="icon"/>	
+
+                        <h:outputLabel value="#{msg.cartao_descricao}" for="descricaoCartao" />
+                        <p:inputText id="descricaoCartao"
+                                     value="#{cartaoNavegacao.cartao.descricao}" />
+                        <p:message for = "descricaoCartao" display="icon"/>	
+
+                        <h:outputLabel value="*#{msg.cartao_limite}" for="limiteCartao" />
+                        <p:inputText id="limiteCartao" value="#{cartaoNavegacao.cartao.limite}"
+                                     required ="true" onkeypress="return(mascaraMoeda(this,'','',event))"/>
+                        <p:message for = "limiteCartao" display="icon"/>
+
+                        <h:outputLabel value ="*#{msg.cartao_dia_vencimento}" for ="diaVencimentoCartao"/>
+                        <p:spinner id="diaVencimentoCartao"
+                                   value="#{cartaoNavegacao.cartao.diaVencimento}" min="1"
+                                   max="25" required="true" />
+                        <p:message for ="diaVencimentoCartao" display="icon"/>
+
+                        <h:outputLabel value ="*#{msg.cartao_dia_fechamento}" for ="diaFechamentoFaturaCartao"/>
+                        <p:spinner id="diaFechamentoFaturaCartao"
+                                   value="#{cartaoNavegacao.cartao.diaFechamentoFatura}" min="1"
+                                   max="25" required="true" />
+                        <p:message for ="diaFechamentoFaturaCartao" display="icon"/>
+
+                        <h:outputLabel value="*#{msg.cartao_status}" for="statusCartao" />
+                        <p:selectOneMenu id="statusCartao" value="#{cartaoNavegacao.statusItemSelecionado}">
+                            <f:selectItem itemValue="1" itemLabel="#{msg.cartao_status_ativado}" />
+                            <f:selectItem itemValue="2" itemLabel="#{msg.cartao_status_desativado}" />
+                        </p:selectOneMenu>
+                        <p:message for="statusCartao" display="icon"/>
+
+                        <p:commandButton actionListener="#{cartaoNavegacaoControle.salvar}"
+                                         ajax ="true" process ="gridCartaoCadastro" value="#{msg.botao_salvar}" update="gridCartaoPrincipal" />
+                    </h:panelGrid>
+
+                </p:fieldset>
+
+                <p:separator/>
+
+                <p:dataTable id="tabelaCartoes" value="#{cartaoNavegacao.cartoes}"
+                             var="cartao" paginator="true" rows="8" styleClass="tabelaPadrao" emptyMessage="#{msg.tabela_msg_vazia}">
+                    <f:facet name="header">#{msg.cartao_tabela_cartoes}</f:facet>
+
+                    <p:column style="text-align: center;" headerText="#{msg.cartao_tabela_coluna_cartao}" filterBy="#{cartao.nome}">
+                        <h:outputLabel value="#{cartao.nome}" />
+                    </p:column>
+
+                    <p:column style="text-align: center;" headerText="#{msg.cartao_tabela_coluna_descricao}"
+                              filterBy="#{cartao.descricao}">
+                        <h:outputLabel value="#{cartao.descricao}" />
+                    </p:column>
+
+                    <p:column style="text-align: center;" headerText="#{msg.cartao_tabela_coluna_limite}" filterBy="#{cartao.limite}">
+                        <h:outputLabel value="#{cartao.limite}">
+                            <f:convertNumber maxFractionDigits="2" type="currency"/>
+                        </h:outputLabel>
+                    </p:column>
+
+                    <p:column style="text-align: center;" headerText="#{msg.cartao_saldo_cartao}" filterBy="#{cartao.saldo}">
+                        <h:outputLabel value ="#{cartao.saldo}">
+                            <f:convertNumber maxFractionDigits="2" type="currency"/>
+                        </h:outputLabel>
+                    </p:column>
+
+                    <p:column style="text-align: center;" headerText="#{msg.cartao_faturas}">
+                        <p:commandLink value ="#{msg.cartao_faturas}" 
+                                       actionListener ="#{cartaoNavegacaoControle.prepararFaturas}"
+                                       process ="@this" update =":formPrincipal:gridFaturasPrincipal"
+                                       oncomplete="faturasCartao.show()">
+                            <f:attribute name ="cartao" value="#{cartao}"/>
+                        </p:commandLink>
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name = "header">#{msg.cartao_tabela_coluna_status}</f:facet>
+                        <h:graphicImage library="imagens" name="#{cartao.status}.jpg"
+                                        width="15px" height="15px" />
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">#{msg.tabela_coluna_editar}</f:facet>
+                        <p:commandLink actionListener="#{cartaoNavegacaoControle.preparaAlteracao}"
+                                       process ="@this" oncomplete="alteracaoCartao.show()" type="button"
+                                       update=":formPrincipal:gridCartaoAltera">
+                            <f:attribute name ="cartao" value="#{cartao}"/>
+                            <h:graphicImage library="imagens" name="editar.jpg" width="15px"
+                                            height="15px" />
+                        </p:commandLink>
+
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">#{msg.tabela_coluna_apagar}</f:facet>
+                        <p:commandLink actionListener="#{cartaoNavegacaoControle.preparaAlteracao}"
+                                       process ="@this" onclick="exclusaoCartao.show()" type="button" 
+                                       update =":formPrincipal:gridCartaoApaga">
+                            <f:attribute name ="cartao" value="#{cartao}"/>
+                            <h:graphicImage library="imagens" name="excluir.jpg"
+                                            width="15px" height="15px" />
+                        </p:commandLink>
+                    </p:column>
+
+                </p:dataTable>           
+            </h:panelGrid>
+
+            <ui:include src ="/pages/restrito/cartao/cartaoEdicao.xhtml"/>
+            <ui:include src ="/pages/restrito/cartao/faturas.xhtml"/> 
+        </h:form>
+    </ui:define>
+</ui:composition>

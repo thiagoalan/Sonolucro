@@ -1,0 +1,105 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/sonolucroTemplateInterno.xhtml">
+
+    <ui:define name="corpo">
+        <h:form id ="formPrincipal">
+            <h:panelGrid id ="gridContaPrincipal" columns ="1" style ="width:100%">
+                <p:fieldset id ="fieldsetConta" legend="#{msg.conta_cadastro_conta}" toggleable="true" toggleSpeed="500">  
+
+                    <p:messages id ="messageCadastroConta" autoUpdate="true" severity="info, error" closable="true"/>
+
+                    <h:panelGrid id="gridContaCadastro" columns="6" cellpadding="10">
+
+                        <h:outputLabel value="*#{msg.conta_nome}" for="nomeConta" />
+                        <p:inputText id="nomeConta" value="#{contaNavegacao.conta.nome}" required="true">
+                            <f:validateLength minimum="3" maximum="25" />
+                        </p:inputText>
+                        <p:message for="nomeConta" display="icon" />
+
+                        <h:outputLabel value="*#{msg.conta_tipo}" for="tipoConta" />
+                        <p:selectOneMenu id="tipoConta" value="#{contaNavegacao.conta.tipo}" required ="true">
+                            <f:selectItems value ="#{contaNavegacao.tiposItem}" /> 
+                        </p:selectOneMenu>
+                        <p:message for="tipoConta" display="icon" />
+
+                        <h:outputLabel value="*#{msg.conta_status}" for="statusConta" />
+                        <p:selectOneMenu id="statusConta" value="#{contaNavegacao.statusItemSelecionado}">
+                            <f:selectItems value ="#{contaNavegacao.statusItens}" /> 
+                        </p:selectOneMenu>
+                        <p:message for="statusConta" display="icon" />
+
+                        <h:outputLabel value="*#{msg.conta_grupos}" for="gruposConta" />
+                        <p:selectOneMenu id="gruposConta" required = "true"
+                                         value="#{contaNavegacao.grupoItemSelecionado}">
+                            <f:selectItem itemValue ="" itemLabel =""/>
+                            <f:selectItems value="#{contaNavegacao.gruposItem}" />
+                        </p:selectOneMenu>
+                        <p:message for="gruposConta" display="icon" />
+
+                        <p:commandButton actionListener = "#{contaNavegacaoControle.salvar}"
+                                         ajax ="true" process="gridContaCadastro" value="#{msg.botao_salvar}"
+                                         update =":formPrincipal:gridContaPrincipal"/>
+                    </h:panelGrid>
+                </p:fieldset>
+
+                <p:separator/>
+
+                <p:dataTable id="tabelaContas"
+                             value="#{contaNavegacao.contas}" var="conta"
+                             paginator="true" rows="12" styleClass="tabelaPadrao" emptyMessage="#{msg.tabela_msg_vazia}">
+                    <f:facet name ="header">#{msg.conta_tabela_contas}</f:facet> 
+
+                    <p:column style="text-align: center;" headerText="#{msg.conta_tabela_coluna_conta}" filterBy="#{conta.nome}">
+                        <h:outputLabel value="#{conta.nome}" />
+                    </p:column>
+
+                    <p:column style="text-align: center;" headerText="#{msg.conta_tipo}" 
+                              filterBy="#{conta.tipoStr}">
+                        <h:outputLabel value ="#{conta.tipoStr}"/>
+                    </p:column>
+
+                    <p:column sortBy="#{conta.grupo.nome}" style="text-align: center;" 
+                              headerText="#{msg.conta_tabela_coluna_grupo}" filterBy="#{conta.grupo.nome}">
+                        <h:outputLabel value="#{conta.grupo.nome}" />
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name = "header">#{msg.conta_tabela_coluna_status}</f:facet>
+                        <h:graphicImage library="imagens" name="#{conta.status}.jpg"
+                                        width="15px" height="15px" />
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">#{msg.tabela_coluna_editar}</f:facet>
+                        <p:commandLink actionListener="#{contaNavegacaoControle.preparaAlteracao}" ajax ="true"
+                                       process ="@this" oncomplete = "alteracaoConta.show()" type="button" update =":formPrincipal:gridContaAltera">
+
+                            <f:attribute name ="conta" value="#{conta}"/>
+                            <h:graphicImage library="imagens" name="editar.jpg"
+                                            width="15px" height="15px" />
+
+                        </p:commandLink>
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">#{msg.tabela_coluna_apagar}</f:facet>
+                        <p:commandLink  actionListener="#{contaNavegacaoControle.preparaAlteracao}" ajax ="true"
+                                        process ="@this" oncomplete="exclusaoConta.show()" type="button"
+                                        update =":formPrincipal:gridContaApaga">
+                            <f:attribute name ="conta" value="#{conta}"/>
+
+                            <h:graphicImage library="imagens" name="excluir.jpg"
+                                            width="15px" height="15px" />
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+
+            <ui:include src ="/pages/restrito/conta/contaEdicao.xhtml"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

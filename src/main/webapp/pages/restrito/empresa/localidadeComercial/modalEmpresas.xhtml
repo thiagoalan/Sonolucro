@@ -1,0 +1,41 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id ="dialogEmpresa" 
+              header="#{msg.empresa_pessoa_responsavel}"
+              widgetVar="modalEmpresa" >
+
+        <p:dataTable id ="tabelaPesquisaEmpresas" value ="#{localidadeComercialNavegacao.empresas}"
+                     var ="empresa" selection="#{localidadeComercialNavegacao.empresaBeanSelecionado}"
+                     paginator="true" rows="10" pageLinks="3" 
+                     emptyMessage="#{msg.tabela_msg_vazia}" rowKey="#{empresa.id}">
+
+            <p:ajax event ="rowSelectRadio" process ="@this" 
+                    update =":formPrincipal:empresaLocalidadeComercial#{localidadeComercialNavegacao.tela}" 
+                    listener ="#{localidadeComercialNavegacaoControle.adicionarEmpresa}"/>
+
+            <p:column selectionMode="single" >
+            </p:column>
+            
+            <p:column headerText="#{msg.empresa_nome_fantasia}" 
+                      filterBy="#{empresa.nomeFantasia}">
+                <h:outputLabel value ="#{empresa.nomeFantasia}"/>
+            </p:column>
+
+            <p:column headerText="#{msg.empresa_cnpj}" filterBy="#{empresa.cnpj}">
+                <h:outputLabel value ="#{empresa.cnpj}"/>
+            </p:column>
+
+            <p:column headerText="#{msg.empresa_e_cliente}" filterBy="#{empresa.ECliente}" 
+                      filterMatchMode="exact">
+                <h:outputLabel value ="#{empresa.ECliente eq 'true' ? msg.empresa_e_cliente_sim : msg.empresa_e_cliente_nao}"/>
+            </p:column>
+
+        </p:dataTable>
+
+    </p:dialog>
+
+</ui:composition>

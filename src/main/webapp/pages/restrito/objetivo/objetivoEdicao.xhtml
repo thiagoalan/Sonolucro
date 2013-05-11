@@ -1,0 +1,191 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/sonolucroTemplateInterno.xhtml">
+
+    <ui:define name ="corpo">
+        <h:form id ="formPrincipal">
+
+            <p:tabView id="tabObjetivos" styleClass="width:100%;" cache="true" dynamic="true">
+
+                <p:tab title = "#{msg.objetivo_editar}">
+
+                    <p:messages id ="messageCadastroObjetivo" autoUpdate="true" 
+                                closable="true" severity="info, error"/>
+
+                    <h:panelGrid id ="gridObjetivoAltera" columns ="6" cellpadding="15">
+
+                        <h:outputLabel value ="*#{msg.objetivo_titulo}" for ="tituloObjetivoAltera"/>
+                        <p:inputText id ="tituloObjetivoAltera" value ="#{objetivoNavegacao.objetivo.titulo}" 
+                                     maxlength="35" required ="true"/>
+                        <p:message for ="tituloObjetivoAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.objetivo_descricao}" for ="descricaoObjetivoAltera"/>
+                        <h:panelGrid columns = "1">
+                            <p:inputTextarea id="descricaoObjetivoAltera" rows="5" cols="30" 
+                                             value="#{objetivoNavegacao.objetivo.descricao}"
+                                             counter="counterDescricaoObjetivoAltera" maxlength="200"       
+                                             counterTemplate="{0} #{msg.mensagem_texto_area}"
+                                             autoResize="false"/>  
+                            <h:outputText id="counterDescricaoObjetivoAltera" />
+                        </h:panelGrid>  
+                        <p:message for ="descricaoObjetivoAltera" display="icon"/>
+
+                        <h:outputLabel value ="*#{msg.objetivo_valor_total}" for ="valorObjetivoAltera"/>
+                        <p:inputText id ="valorObjetivoAltera" 
+                                     value ="#{objetivoNavegacao.valorTotalStr}"
+                                     onkeypress="return (mascaraMoeda(this,'.',',',event))" 
+                                     required ="true"/>
+                        <p:message for ="valorObjetivoAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.objetivo_valor_guardado}" for ="valorAtualObjetivoAltera"/>
+                        <h:outputText id ="valorAtualObjetivoAltera" value ="#{objetivoNavegacao.objetivo.valorTotalGuardadoStr}">
+                            <f:convertNumber type="currency" maxFractionDigits="2"/>
+                        </h:outputText>
+                        <p:message for ="valorAtualObjetivoAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.objetivo_ultimo_valor_guardado}" for ="gridValor"/>
+                        <h:panelGrid id ="gridValor" columns ="3">
+                            <h:outputLabel value ="#{objetivoNavegacao.ultimoValorGuardado.dataValor}">
+                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                            </h:outputLabel>
+                            <h:outputLabel value ="#{objetivoNavegacao.ultimoValorGuardado.valorStr}">
+                                <f:convertNumber type="currency" maxFractionDigits="2"/>
+                            </h:outputLabel>
+                            <p:commandButton value ="+" process ="@this" actionListener ="#{objetivoNavegacaoControle.prepararAdicaoValores}"
+                                             oncomplete="adicionarValorDialog.show()" update =":formPrincipal:gridValoresObjetivo"/>
+                        </h:panelGrid>
+                        <p:message for ="gridValor" display="icon"/>
+
+                        <h:outputLabel value ="*#{msg.objetivo_data_inicial_prevista}" for ="inicioPrevistoObjetivoAltera"/>
+                        <p:calendar id="inicioPrevistoObjetivoAltera" value ="#{objetivoNavegacao.objetivo.dataInicialPrevista}" 
+                                    mode="popup" pattern="dd/MM/yyyy" navigator="true"/>
+                        <p:message for ="inicioPrevistoObjetivoAltera" display="icon"/>
+
+                        <h:outputLabel value ="*#{msg.objetivo_data_final_prevista}" for ="fimPrevistoObjetivoAltera"/>
+                        <p:calendar id ="fimPrevistoObjetivoAltera" value ="#{objetivoNavegacao.objetivo.dataFinalPrevista}"
+                                    mode ="popup"  pattern="dd/MM/yyyy" navigator="true"/>
+                        <p:message for ="fimPrevistoObjetivoAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.objetivo_data_final_efetivo}" for ="fimEfetivoObjetivo"/>
+                        <h:outputLabel id ="fimEfetivoObjetivo" value ="#{objetivoNavegacao.objetivo.dataFinalEfetiva}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputLabel>
+                        <p:message for ="fimEfetivoObjetivo" display="icon"/>    
+
+                        <h:outputLabel value ="#{msg.objetivo_meta_valor_dia}" for ="metaDiaObjetivoAltera"/>
+                        <h:outputText id ="metaDiaObjetivoAltera" value ="#{objetivoNavegacao.objetivo.metaValorDia}">
+                            <f:convertNumber type="currency" maxFractionDigits="2"/>
+                        </h:outputText>
+                        <p:message for ="metaDiaObjetivoAltera" display ="icon"/>
+                        
+                         <h:outputLabel value ="#{msg.objetivo_meta_valor_dia_efetivo}" for ="metaDiaEfetivaObjetivoAltera"/>
+                         <h:outputText id ="metaDiaEfetivaObjetivoAltera" value ="#{objetivoNavegacao.objetivo.metaEfetivoDia}">
+                            <f:convertNumber type="currency" maxFractionDigits="2"/>
+                        </h:outputText>
+                        <p:message for ="metaDiaEfetivaObjetivoAltera" display ="icon"/>
+
+                        <h:outputLabel value ="#{msg.objetivo_meta_valor_mes} #{objetivoNavegacao.objetivo.mesAtualStr}"
+                                       for ="metaMesObjetivoAltera"/>
+                        <h:outputText id ="metaMesObjetivoAltera" value ="#{objetivoNavegacao.objetivo.metaValorMes}">
+                            <f:convertNumber type="currency" maxFractionDigits="2"/>
+                        </h:outputText>
+                        <p:message for ="metaMesObjetivoAltera" display="icon"/>
+                        
+                         <h:outputLabel value ="#{msg.objetivo_meta_valor_mes_efetivo} #{objetivoNavegacao.objetivo.mesAtualStr}"
+                                       for ="metaMesObjetivoEfetivoAltera"/>
+                         <h:outputText id ="metaMesObjetivoEfetivoAltera" value ="#{objetivoNavegacao.objetivo.metaEfetivoMes}">
+                            <f:convertNumber type="currency" maxFractionDigits="2"/>
+                        </h:outputText>
+                        <p:message for ="metaMesObjetivoEfetivoAltera" display="icon"/>
+
+                        <p:commandButton value ="#{msg.botao_voltar}" process ="@this" action="#{objetivoNavegacaoControle.irParaTelaObjetivo}"/>
+
+                        <p:commandButton value="#{msg.botao_salvar}" actionListener="#{objetivoNavegacaoControle.alterar}"
+                                         process ="gridObjetivoAltera" update =":formPrincipal:tabObjetivos"/>
+
+                    </h:panelGrid>
+                </p:tab>
+
+                <p:tab id ="tabGraficos" title = "#{msg.objetivo_graficos}">
+
+                    <h:panelGrid columns ="1" style="width: 100%; overflow: scroll;">
+                        <p:panel closable="true" style="width: 100%;">
+                            <p:barChart value ="#{objetivoNavegacao.objetivo.graficoBarra}"
+                                        title="#{objetivoNavegacao.objetivo.titulo}"
+                                        legendPosition="ne" 
+                                        style="width: 100%;" zoom="true"/>
+
+                        </p:panel>
+
+                        <p:panel closable="true" style="width: 100%;">
+                            <p:lineChart value="#{objetivoNavegacao.objetivo.graficoLinha}" 
+                                         title="#{objetivoNavegacao.objetivo.titulo}" style="width: 100%;" 
+                                         legendPosition="ne" fill ="true" zoom="true"/>
+                        </p:panel>
+                    </h:panelGrid>
+                </p:tab>
+
+            </p:tabView>
+
+            <p:dialog widgetVar="adicionarValorDialog" showEffect="slide" hideEffect="slide">
+                <h:panelGrid id ="gridValoresObjetivo" columns ="1">
+                    <h:panelGrid id ="gridAdicionarValor" columns ="4">
+                        <p:inputText  value ="#{objetivoNavegacao.valorGuardadoStr}" required ="true"
+                                     onkeypress="return (mascaraMoeda(this,'.',',',event))" />
+                        <h:outputLabel value ="#{objetivoNavegacao.valorGuardado.dataValor}">
+                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                        </h:outputLabel>
+                        <p:commandButton value ="#{msg.botao_cancelar}" onclick ="adicionarValorDialog.hide()" process ="@this"/>
+                        <p:commandButton value ="#{msg.botao_salvar}" actionListener ="#{objetivoNavegacaoControle.adicionarValor}"
+                                         onsuccess="adicionarValorDialog.hide()"
+                                         process ="gridAdicionarValor" update=":formPrincipal:tabObjetivos tabelaValoresObjetivos"/>
+                    </h:panelGrid>
+
+                    <p:dataTable id ="tabelaValoresObjetivos" value ="#{objetivoNavegacao.objetivo.valoresGuardados}" 
+                                 var ="valor" emptyMessage="#{msg.tabela_msg_vazia}"
+                                 pageLinks="5" paginator="true" rows="5">
+
+                        <p:column headerText="#{msg.objetivo_data}">
+                            <h:outputText value ="#{valor.dataValor}">
+                                <f:convertDateTime pattern="dd/MM/YYYY"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="#{msg.objetivo_valor}">
+                            <h:outputText value ="#{valor.valorStr}">
+                                <f:convertNumber type="currency" maxFractionDigits="2"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column headerText="#{msg.tabela_coluna_editar}">
+                            <p:commandLink actionListener="#{objetivoNavegacaoControle.prepararAlteracaoValor}"
+                                           process ="@this"  type="button" update =":formPrincipal:gridAdicionarValor">
+                                <f:attribute name ="valor" value="#{valor}"/>
+                                <h:graphicImage library="imagens" name="editar.jpg" width="15px"
+                                                height="15px" />
+                            </p:commandLink>
+
+                        </p:column>
+
+                        <p:column headerText="#{msg.tabela_coluna_apagar}">
+                            <p:commandLink actionListener="#{objetivoNavegacaoControle.apagarValor}"
+                                           process ="@this"  type="button" update =":formPrincipal:tabObjetivos :formPrincipal:tabelaValoresObjetivos" >
+                                <f:attribute name ="valor" value="#{valor}"/>
+                                <h:graphicImage library="imagens" name="excluir.jpg" width="15px"
+                                                height="15px" />
+                            </p:commandLink>
+                        </p:column>
+
+                    </p:dataTable>
+
+                </h:panelGrid>
+            </p:dialog>
+
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

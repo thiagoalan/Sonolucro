@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xml:lang="en" lang="en">
+
+    <!-- <f:view contentType="text/html; charset=ISO-8859-1"> -->  
+    <h:head>
+        <title>So No Lucro</title>
+        <h:outputStylesheet library="css" name="style.css" />
+        <h:outputScript library="script" name="functions.js" />
+    </h:head>
+
+    <h:body>
+
+        <div id = "container">
+            <p:layout id ="layoutInternoSonoluro" fullPage ="true">
+
+                <p:layoutUnit id ="topo" position ="north">
+                    <h:graphicImage library = "imagens" name = "top_sonolucro.jpg"
+                                    width = "99%" height = "150 px"/>
+                </p:layoutUnit>
+                <p:layoutUnit id ="direito" position ="east" minSize="240" closable="true">   
+                    <h:form id ="formDireito">
+                        <ui:include src ="/pages/restrito/unidadeDireita.xhtml"/>
+                    </h:form>
+                </p:layoutUnit>  
+                <p:layoutUnit id ="esquerdo" position ="west" header ="#{msg.menu_menu}">
+                    <h:form id ="formMenu">
+                        <ui:include src="/pages/restrito/menu-sonolucro.xhtml" />
+                    </h:form>
+                </p:layoutUnit>
+
+                <p:layoutUnit id ="centro" position ="center" >
+                    <div id = "corpo">
+                        <ui:insert name="corpo"/>
+                    </div>
+                </p:layoutUnit>
+
+
+            </p:layout>
+
+        </div>
+
+    </h:body>
+    <!-- </f:view> -->
+</html>

@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/sonolucroTemplateInterno.xhtml">
+
+    <ui:define name="corpo">
+        <h:form id ="formPrincipal">
+            <h:panelGrid id ="gridGraficoContaPrincipal" style ="width:100%">
+
+                <p:fieldset id ="fieldsetGraficoConta" legend="#{msg.conta_grafico}" toggleable="true" toggleSpeed="500">
+
+                    <h:panelGrid id ="gridGraficoContaPesquisa" columns ="5" cellspacing="15">
+                        <h:outputLabel value ="#{msg.conta_data_inicial}"/>
+                        <p:calendar id="dataInicial" pattern="dd/MM/yyyy"
+                                    value="#{contaNavegacao.dataInicialGrafico}"
+                                    required="true" />
+                        <h:outputLabel value ="#{msg.conta_data_final}"/>
+                        <p:calendar id="dataFinal" pattern="dd/MM/yyyy"
+                                    value="#{contaNavegacao.dataFinalGrafico}"
+                                    required="true" />
+                        <p:commandButton value ="#{msg.botao_pesquisar}" 
+                                         ajax ="true" process ="gridGraficoContaPesquisa"
+                                         actionListener ="#{contaNavegacaoControle.pesquisarGrafico}"
+                                         update ="@form"/>
+                    </h:panelGrid>    
+
+                </p:fieldset>
+                <p:separator/>
+                <h:panelGrid id ="gridGraficoPizzaConta" columns ="1" style ="width:100%">
+                    <h:panelGrid columns="2" style="width: 100%">
+                        <p:panel header="#{msg.conta_tab_receita}" rendered="#{not empty contaNavegacao.graficoReceita}" >
+                            <p:pieChart id ="graficoContaPizzaReceita" value ="#{contaNavegacao.graficoReceita}" 
+                                        legendPosition="e" fill="true" sliceMargin="5" showDataLabels="true" />
+                        </p:panel>
+                        <p:panel header="#{msg.conta_tab_despesa}" rendered="#{not empty contaNavegacao.graficoDespesa}">
+                            <p:pieChart id ="graficoContaPizzaDespesa" value ="#{contaNavegacao.graficoDespesa}"
+                                        legendPosition="e" fill="true" sliceMargin="5" showDataLabels="true" diameter="250"/>
+                        </p:panel>
+                    </h:panelGrid>
+                    <p:panel header="#{msg.conta_receita_despesa}" rendered="#{not empty contaNavegacao.grafico}" >
+                        <p:pieChart id="graficoContaPizza" value="#{contaNavegacao.grafico}" legendPosition="e" fill="true" showDataLabels="true"  
+                                    style="width:100%; height:300px;" sliceMargin="5" diameter="250" />
+
+                        <h:panelGrid id ="gridInfoGraficoPizzaConta" columns ="4">
+
+                            <h:outputLabel value ="#{msg.conta_total_despesa}"/>
+                            <h:outputText value ="#{contaNavegacao.saldoDespesa}">
+                                <f:convertNumber maxFractionDigits="2" type="currency"/>
+                            </h:outputText>
+
+                            <h:outputLabel value ="#{msg.conta_total_receita}"/>
+
+                            <h:outputText value ="#{contaNavegacao.saldoReceita}">
+                                <f:convertNumber maxFractionDigits="2" type="currency"/>
+                            </h:outputText>
+
+                        </h:panelGrid>
+                    </p:panel>
+                </h:panelGrid>
+            </h:panelGrid>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

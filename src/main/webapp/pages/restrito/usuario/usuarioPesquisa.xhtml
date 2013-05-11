@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/sonolucroTemplateInterno.xhtml">
+
+    <ui:define name ="corpo">
+        <h:form id ="formPrincipal">
+            <p:dataTable id ="tabelaUsuarios"  value="#{usuarioNavegacao.usuarios}"
+                         var ="usuario" emptyMessage="#{msg.tabela_msg_vazia}" paginator="true"
+                         pageLinks="5" rows="15" style="text-align: center;" rowKey="#{usuario.id}">
+
+                <f:facet name ="header">
+                    <h:outputLabel value ="Usuários"/>
+                </f:facet>
+
+                <p:column headerText="ID" filterBy="#{usuario.id}">
+                    <h:outputLabel value ="#{usuario.id}"/>
+                </p:column>
+
+                <p:column headerText="#{msg.usuario_nome}" filterBy="#{usuario.nome}">
+                    <h:outputLabel value ="#{usuario.nome}"/>
+                </p:column>
+
+                <p:column headerText="#{msg.usuario_sobrenome}" filterBy="#{usuario.sobrenome}">
+                    <h:outputLabel value ="#{usuario.sobrenome}"/>
+                </p:column>
+
+                <p:column headerText="#{msg.usuario_email}" filterBy="#{usuario.email}">
+                    <h:outputLabel value ="#{usuario.email}"/>
+                </p:column>
+
+                <p:column headerText="#{msg.usuario_data_cadastro}">
+                    <h:outputLabel value ="#{usuario.dataCadastro}">
+                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                    </h:outputLabel>
+                </p:column>
+
+                <p:column headerText="#{msg.usuario_permissao}" filterBy="#{usuario.permissaoStr}">
+                    <h:outputLabel value ="#{usuario.permissaoStr}"/>
+                </p:column>
+
+                <p:column headerText="#{msg.tabela_coluna_editar}">
+                    <p:commandLink action="#{usuarioNavegacaoControle.irParaTelaPesquisaEdicao}"
+                                   process ="@this" type="button">
+                        <f:attribute name ="usuario" value="#{usuario}"/>
+                        <h:graphicImage library="imagens" name="editar.jpg" width="15px"
+                                        height="15px" />
+                    </p:commandLink>
+                </p:column>
+
+
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

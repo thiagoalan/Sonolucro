@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id="editaDialogMovimentacao" header="#{msg.movimentacao_pane_editar}"
+              widgetVar="alteracaoMovimentacao" showEffect="slide" hideEffect="slide">
+
+        <h:panelGrid id ="gridMovimentacaoAltera" columns="9" cellspacing="10">
+
+            <h:outputLabel value="*#{msg.movimentacao_valor}" for="valorMovimentacaoAltera" />
+            <p:inputText id="valorMovimentacaoAltera"
+                         value="#{movimentacaoNavegacao.valorStr}"
+                         required="true" onkeypress="return(mascaraMoeda(this,'.',',',event))">
+            </p:inputText>
+            
+            <p:message for="valorMovimentacaoAltera" display="icon" />
+
+            <h:outputLabel value="*#{msg.movimentacao_contas}" for="contaMovimentacaoAltera" />
+            <p:selectOneMenu id="contaMovimentacaoAltera" required = "true"
+                             value="#{movimentacaoNavegacao.contaItemSelecionado}">
+                <f:selectItem itemValue ="" itemLabel =""/>
+                <f:selectItems value="#{movimentacaoNavegacao.contasItem}" />
+            </p:selectOneMenu>
+            <p:message for="contaMovimentacaoAltera" display="icon"/>
+
+            <h:outputLabel value="#{msg.movimentacao_cartoes}" for="cartoesMovimentacaoAltera" />
+            <p:selectOneMenu id ="cartoesMovimentacaoAltera" value ="#{movimentacaoNavegacao.cartaoItemSelecionado}" >
+                <f:selectItem itemValue="0" itemLabel =""/>
+                <f:selectItems value ="#{movimentacaoNavegacao.cartoesItem}"/>
+            </p:selectOneMenu>
+            <p:message for="cartoesMovimentacaoAltera" />
+
+            <h:outputLabel value="*#{msg.movimentacao_data}" for="dataVencimentoMovimentacaoAltera" />
+            <p:calendar id="dataVencimentoMovimentacaoAltera" pattern="dd/MM/yyyy"
+                        value="#{movimentacaoNavegacao.movimentacao.dataVencimento}"
+                        required="true"/>
+            <p:message for="dataVencimentoMovimentacaoAltera" display="icon"/>
+
+            <h:outputLabel value="#{msg.movimentacao_descricao}" for="descricaoMovimentacaoAltera" />
+            <h:panelGrid columns = "1">
+                <p:inputTextarea id="descricaoMovimentacaoAltera" rows="4" cols="20" 
+                                 value="#{movimentacaoNavegacao.movimentacao.descricao}"
+                                 counter="counterDescricaoMovimentacaoAltera" maxlength="50"       
+                                 counterTemplate="{0} #{msg.mensagem_texto_area}" autoResize="false"/>  
+                <h:outputText id="counterDescricaoMovimentacaoAltera" />
+            </h:panelGrid>  
+            <p:message for="descricaoMovimentacaoAltera" display="icon"/>
+
+            <h:outputLabel value="#{msg.movimentacao_sequencia}" for="sequenciaMovimentacaoAltera" />
+            <p:spinner id="sequenciaMovimentacaoAltera"
+                       value="#{movimentacaoNavegacao.movimentacao.sequencia}" min="1"
+                       max="500" required="true" />
+            <p:message for="sequenciaMovimentacaoAltera" display="icon" />
+
+
+            <p:commandButton id="declineMovimentacao" value="#{msg.botao_cancelar}"
+                             onclick="alteracaoMovimentacao.hide()" type="button" 
+                             process ="@this"/>
+            <p:commandButton id="confirmMovimentacao"
+                             actionListener="#{movimentacaoNavegacaoControle.alterar}"
+                             value="#{msg.botao_salvar}" process ="gridMovimentacaoAltera" update=":formPrincipal:tabelaMovimentacoes"
+                             oncomplete="alteracaoMovimentacao.hide()">
+            </p:commandButton>
+        </h:panelGrid>
+    </p:dialog>
+
+    <p:dialog id="excluiMovimentacaoDialog" showEffect="slide" hideEffect="slide"
+              header="#{msg.movimentacao_pane_apagar}" widgetVar="exclusaoMovimentacao">
+
+        <h:outputLabel value ="#{msg.movimentacao_msg_confirma_exclusao}?" />
+
+        <br/>
+
+        <h:panelGrid id ="gridMovimentacaoApaga" columns="2">
+
+            <p:commandButton id="decline" value="#{msg.botao_cancelar}" process ="@this"
+                             onclick="exclusaoMovimentacao.hide()" type="button" />
+
+            <p:commandButton id="confirm"
+                             actionListener="#{movimentacaoNavegacaoControle.apagar}"
+                             value="#{msg.botao_sim}" process ="@this" update=":formPrincipal:tabelaMovimentacoes"
+                             oncomplete="exclusaoMovimentacao.hide()">
+
+            </p:commandButton>
+
+
+        </h:panelGrid>
+
+    </p:dialog>
+
+</ui:composition>

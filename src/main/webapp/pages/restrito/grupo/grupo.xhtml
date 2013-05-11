@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/sonolucroTemplateInterno.xhtml">
+
+    <ui:define name="corpo">        
+
+        <h:form id ="formPrincipal">
+            <h:panelGrid id ="gridGrupoPrincipal" columns ="1" style ="width: 99%">
+
+                <p:fieldset id ="fieldSetGrupo" legend="#{msg.grupo_cadastro_grupo}" toggleable="true" toggleSpeed="500">  
+
+                    <p:messages id ="messageCadastroGrupo" autoUpdate="true" severity="info, error"/>
+
+                    <h:panelGrid id = "gridGrupoCadastro" columns="6" cellpadding="10">
+
+                        <h:outputLabel value="*#{msg.grupo_nome}" for="nomeGrupo" />
+                        <p:inputText id="nomeGrupo" value="#{grupoNavegacao.grupo.nome}"
+                                     required="true">
+                            <f:validateLength minimum="1" maximum="25" />
+                        </p:inputText>
+                        <p:message for = "nomeGrupo" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.grupo_status}" for ="selectStatusGrupo"/>
+                        <p:selectOneMenu id ="selectStatusGrupo" value ="#{grupoNavegacao.statusItemSelecionado}" required ="true">
+                            <f:selectItems value="#{grupoNavegacao.statusItens}"/>                        
+                        </p:selectOneMenu> 
+                        <p:message for ="selectStatusGrupo" display="icon"/>
+
+
+                        <p:commandButton actionListener="#{grupoNavegacaoControle.salvar}" value="#{msg.botao_salvar}"
+                                         process ="gridGrupoCadastro" ajax="true"  update="gridGrupoPrincipal" />
+
+                    </h:panelGrid>        
+                </p:fieldset>
+                <p:separator/>
+
+                <p:dataTable id="tabelaGrupos" value="#{grupoNavegacao.grupos}" style ="width:99%"
+                             var="grupo" paginator="true" rows="8" styleClass = "tabelaPadrao" emptyMessage="#{msg.tabela_msg_vazia}">
+                    <f:facet name="header">#{msg.grupo_tabela_grupos}</f:facet>
+
+                    <p:column style="text-align: center;" headerText="#{msg.grupo_tabela_coluna_grupo}" 
+                              filterBy="#{grupo.nome}">
+                        <h:outputLabel value="#{grupo.nome}" />
+                    </p:column>
+
+                    <p:column style="text-align: center;" headerText="#{msg.grupo_status}" >
+                        <h:graphicImage library="imagens" name="#{grupo.status}.jpg"
+                                        width="15px" height="15px"/>
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">#{msg.tabela_coluna_editar}</f:facet>
+                        <p:commandLink actionListener="#{grupoNavegacaoControle.preparaAlteracao}"
+                                       process ="@this" onclick="alteracaoGrupo.show()" type="button" update =":formPrincipal:gridGrupoAltera">
+                            <f:attribute name ="grupo" value="#{grupo}"/>
+                            <h:graphicImage library="imagens" name="editar.jpg" width="15px"
+                                            height="15px" />
+
+                        </p:commandLink>
+
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">#{msg.tabela_coluna_apagar}</f:facet>
+                        <p:commandLink actionListener="#{grupoNavegacaoControle.preparaAlteracao}"
+                                       process ="@this" onclick="exclusaoGrupo.show()" type="button" update =":formPrincipal:gridGrupoApaga">
+                            <f:attribute name ="grupo" value="#{grupo}"/>
+                            <h:graphicImage library="imagens" name="excluir.jpg" width="15px"
+                                            height="15px" />
+                        </p:commandLink>
+                    </p:column>
+
+                </p:dataTable>
+            </h:panelGrid>
+
+            <ui:include src ="/pages/restrito/grupo/grupoEdicao.xhtml"/>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

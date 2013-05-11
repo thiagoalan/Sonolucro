@@ -1,0 +1,142 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/sonolucroTemplateInterno.xhtml">
+
+    <ui:define name="corpo">
+
+         #{indexNavegacaoControle.init}
+        
+        <h:form id ="formPrincipal">
+            <script src ="https://maps.google.com/maps/api/js?sensor=true"
+            type ="text/javascript"></script>
+
+            <p:growl id ="messagePrincipal" autoUpdate="true" severity="info, error"/>
+            
+            <p:tabView id="tabPrincipal" styleClass="width:100%;" >
+               
+                <p:tab title = "#{msg.index_titulo}">
+                    <h:panelGrid columns="2" style="text-align: start" cellspacing="15">
+
+                        <h:panelGrid columns="1">
+
+                            <h:outputLabel value="#{msg.index_saudacao} #{indexNavegacao.nomeDoUsuario}"
+                                           styleClass="bemVindo" />
+                            <p:separator/>
+                            <h:outputLabel value ="#{msg.index_ultimo_acesso}: #{indexNavegacao.ultimoAcesso}"/>
+                            <p:separator/>
+                            <h:panelGrid columns ="2">
+                                <h:outputLabel value ="#{msg.index_saldo_atual}:"/>
+                                <h:outputLabel value="#{indexNavegacao.saldoAtual}">
+                                    <f:convertNumber maxFractionDigits="2" type="currency"/>
+                                </h:outputLabel>
+                            </h:panelGrid>
+                            <p:separator/>
+                            <h:panelGrid columns ="2">
+                                <h:outputLabel value ="#{msg.index_saldo_previsto}:"/>
+                                <h:outputLabel value="#{indexNavegacao.saldoPrevisto}">
+                                    <f:convertNumber maxFractionDigits="2" type="currency"/>
+                                </h:outputLabel>
+                            </h:panelGrid>
+                            <p:separator/>
+
+
+                            <p:accordionPanel id ="tabInfoContas" style="width:200px; min-height: 270px;" 
+                                              dynamic="true" >
+
+                                <p:tab title="#{msg.index_pane_ultimos_lancamentos}">
+
+                                    <p:dataList value="#{indexNavegacao.ultimasMovimentacoes}"
+                                                var="mov" type="ordered">
+                                        <h:outputLabel value="#{mov.dataVencimento}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        </h:outputLabel>
+                                        <h:outputLabel value="#{mov.conta.nome}" />
+                                    </p:dataList>
+                                </p:tab>
+
+
+                                <p:tab title="#{msg.index_pane_contas_vencer}">
+
+                                    <p:dataList value="#{indexNavegacao.movimentacoesAVencer}"
+                                                var="mov" type="ordered">
+                                        <h:outputLabel value="#{mov.dataVencimento}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                                        </h:outputLabel>
+                                        <h:outputLabel value="#{mov.conta.nome}" />
+                                    </p:dataList>
+                                </p:tab>
+
+                            </p:accordionPanel>  
+                        </h:panelGrid>
+
+                        <h:panelGrid>
+                            <p:panel header="#{msg.grafico_anual_titulo}">
+                                <p:lineChart value="#{indexNavegacao.graficoLinha}" legendPosition="e" 
+                                             zoom="true"  
+                                             style="width:570px;height:200px" widgetVar="chart"/>
+
+                            </p:panel>
+                            <p:separator/>
+
+                            <p:dataTable value ="#{indexNavegacao.cartoesDeCredito}" var ="cartao" 
+                                         emptyMessage="#{msg.tabela_msg_vazia}" rows="3" 
+                                         paginator="true" pageLinks="2" widgetVar="#{cartao.id}">
+                                <f:facet name ="header"> #{msg.cartao_cartoes_de_credito} </f:facet>
+
+
+                                <p:column headerText="Cartão">
+                                    <h:outputLabel value ="#{cartao}" style="color:#0000CD;"/>
+                                </p:column>
+                                <p:column>
+                                    <p:progressBar value="#{cartao.saldoPorcento}" interval="100" style ="min-width: 200px"/>
+                                </p:column>
+                                <p:column headerText ="#{msg.cartao_saldo_cartao}">
+                                    <h:outputLabel value ="#{cartao.saldo}">
+                                        <f:convertNumber maxFractionDigits="2" type="currency"/>
+                                    </h:outputLabel>
+                                </p:column>
+
+                                <p:column headerText="#{msg.cartao_limite}">
+                                    <h:outputLabel value ="#{cartao.limite}">
+                                        <f:convertNumber maxFractionDigits="2" type="currency"/>
+                                    </h:outputLabel>
+                                </p:column>
+                            </p:dataTable>
+
+                        </h:panelGrid>
+
+                    </h:panelGrid> 
+                </p:tab>
+
+                <p:tab title="Agenda Financeira">
+                    <p:schedule id ="agendaFinanceira" value ="#{movimentacaoNavegacao.eventModel}" widgetVar="agendaFinanceira" 
+                                view="month">
+                        <p:ajax event ="dateSelect" listener ="#{agendaMovimentacaoNavegacaoControle.prepararCadastroAgenda}" 
+                                oncomplete="agendaMovimentacaoCadastroDialog.show()" 
+                                process="@this" update=":formPrincipal:gridMovimentacaoCadastro"/>
+                        <p:ajax event ="eventSelect" listener ="#{agendaMovimentacaoNavegacaoControle.prepararAlteracaoMovimentacao}"
+                                oncomplete ="agendaMovimentacaoCadastroDialog.show()" 
+                                process="@this" update =":formPrincipal:gridMovimentacaoCadastro"/>
+                        <p:ajax event ="eventMove" listener ="#{agendaMovimentacaoNavegacaoControle.moverMovimentacao}"/>
+
+                    </p:schedule> 
+                </p:tab>
+
+                        <!--
+                            <p:tab title ="#{msg.index_tab_oportunidade}">
+                                <p:gmap center="-23.548488, -46.63029" zoom="13" type="HYBRID"   
+                                        style="width:400px;height:350px" />
+                            </p:tab>                        
+                -->
+
+            </p:tabView>
+
+            <ui:include src ="/pages/restrito/agendaMovimentacaoCadastro.xhtml"/>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

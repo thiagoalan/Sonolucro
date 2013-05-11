@@ -1,0 +1,105 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id="editaResponsavelEmpresaDialog" 
+              header="#{msg.responsavel_empresa_editar}" 
+              widgetVar="alteracaoResponsavelEmpresa"
+              showEffect="slide" hideEffect="slide">
+        <h:panelGrid id ="gridResponsavelEmpresaAltera" columns="6" cellspacing="10">
+
+            <h:outputLabel value ="#{msg.usuario_nome}" for ="nomeResponsavelEmpresaAltera"/>
+            <p:inputText id ="nomeResponsavelEmpresaAltera" 
+                         value ="#{responsavelEmpresaNavegacao.responsavelEmpresa.nome}"
+                         required ="true"/>
+            <p:message for ="nomeResponsavelEmpresaAltera" display="icon"/>
+
+            <h:outputLabel value ="#{msg.usuario_sobrenome}" for ="sobrenomeResponsavelEmpresaAltera"/>
+            <p:inputText id="sobrenomeResponsavelEmpresaAltera" 
+                         value ="#{responsavelEmpresaNavegacao.responsavelEmpresa.sobrenome}"
+                         required ="true"/>
+            <p:message for ="sobrenomeResponsavelEmpresaAltera" display="icon"/>
+
+            <h:outputLabel value ="#{msg.usuario_cpf}" for ="cpfResponsavelEmpresaAltera"/>
+            <p:inputText id="cpfResponsavelEmpresaAltera" value ="#{responsavelEmpresaNavegacao.responsavelEmpresa.cpf}"
+                         required ="true"/>
+            <p:message for ="cpfResponsavelEmpresaAltera" display="icon"/>
+
+            <h:outputLabel value ="#{msg.usuario_telefone}" for ="telefoneResponsavelEmpresaAltera"/>
+            <p:inputText id ="telefoneResponsavelEmpresaAltera" value ="#{responsavelEmpresaNavegacao.responsavelEmpresa.telefone}"/>
+            <p:message for ="telefoneResponsavelEmpresaAltera" display="icon"/>
+
+            <h:outputLabel value ="#{msg.usuario_email}" for ="emailResponsavelEmpresaAltera"/>
+            <p:inputText id ="emailResponsavelEmpresaAltera" value ="#{responsavelEmpresaNavegacao.responsavelEmpresa.email}"/>
+            <p:message for ="emailResponsavelEmpresaAltera" display="icon"/>
+
+            <h:outputLabel value ="#{msg.usuario_localidade}" for ="gridLocalidadeResponsavelEmpresaAltera"/>
+
+            <h:panelGrid id ="gridLocalidadeResponsavelEmpresaAltera" columns ="3">
+                <h:outputLabel value ="#{msg.empresa_pais}" for ="paisResponsavelEmpresaAltera"/>
+                <p:selectOneMenu id ="paisResponsavelEmpresaAltera" value ="#{responsavelEmpresaNavegacao.paisItemSelecionado}">
+                    <f:selectItem itemValue ="0" itemLabel=""/>
+                    <f:selectItems value ="#{responsavelEmpresaNavegacao.paisesItem}"/>
+                    <p:ajax listener="#{responsavelEmpresaNavegacaoControle.iniciarEstados}" process="@this" 
+                            update =":formPrincipal:estadoResponsavelEmpresaAltera"/>
+                </p:selectOneMenu>
+                <p:message for ="paisResponsavelEmpresaAltera" display="icon"/>
+
+                <h:outputLabel value ="#{msg.empresa_estado}" for ="estadoResponsavelEmpresaAltera"/>
+                <p:selectOneMenu id ="estadoResponsavelEmpresaAltera" value ="#{responsavelEmpresaNavegacao.estadoItemSelecionado}">
+                    <f:selectItem itemValue ="0" itemLabel =""/>
+                    <f:selectItems value ="#{responsavelEmpresaNavegacao.estadosItem}"/>
+                    <p:ajax listener = "#{responsavelEmpresaNavegacaoControle.iniciarCidades}" process ="@this" 
+                            update =":formPrincipal:cidadeResponsavelEmpresaAltera"/>
+                </p:selectOneMenu>
+                <p:message for ="estadoResponsavelEmpresaAltera" display="icon"/>
+
+                <h:outputLabel value ="#{msg.empresa_cidade}" for ="cidadeResponsavelEmpresaAltera"/>
+                <p:selectOneMenu id ="cidadeResponsavelEmpresaAltera" value ="#{responsavelEmpresaNavegacao.cidadeItemSelecionado}">
+                    <f:selectItem itemValue ="0" itemLabel=""/>
+                    <f:selectItems value ="#{responsavelEmpresaNavegacao.cidadesItem}"/>
+                </p:selectOneMenu>
+                <p:message for ="cidadeResponsavelEmpresaAltera" display="icon"/>
+            </h:panelGrid>
+            <p:message for ="gridLocalidadeResponsavelEmpresaAltera" display="icon"/>
+
+            <h:outputLabel value ="#{msg.usuario_sexo}" for ="sexoResponsavelEmpresaAltera"/>
+            <p:selectOneMenu id ="sexoResponsavelEmpresaAltera" value ="#{responsavelEmpresaNavegacao.sexoItemSelecionado}">
+                <f:selectItem itemValue ="1" itemLabel ="#{msg.usuario_sexo_fem}"/>
+                <f:selectItem itemValue ="2" itemLabel ="#{msg.usuario_sexo_masc}"/>
+            </p:selectOneMenu>
+            <p:message for ="sexoResponsavelEmpresaAltera" display="icon"/>
+
+
+            <p:commandButton id="declineAlteracaoResponsavelEmpresa"  value="#{msg.botao_cancelar}"
+                             process ="@this" onclick="alteracaoResponsavelEmpresa.hide()" type="button" />
+
+            <p:commandButton id="confirmAlteracaoResponsavelEmpresa"
+                             actionListener="#{responsavelEmpresaNavegacaoControle.alterar}" value="#{msg.botao_salvar}"
+                             process ="gridResponsavelEmpresaAltera" update="formPrincipal:tabelaResponsavelEmpresa" 
+                             oncomplete="alteracaoResponsavelEmpresa.hide()" >
+            </p:commandButton>
+
+        </h:panelGrid>
+    </p:dialog>
+
+    <p:dialog id="excluiResponsavelEmpresaDialog" showEffect="slide" hideEffect="slide"
+              header="#{msg.responsavel_empresa_excluir}" widgetVar="exclusaoResponsavelEmpresa">
+
+
+        <h:outputLabel value ="#{msg.responsavel_empresa_msg_confirma_exclusao}?"/>
+        <br/>
+        <h:panelGrid id ="gridResponsavelEmpresaApaga" columns="2">
+            <p:commandButton id="declineExclusao"  value="#{msg.botao_cancelar}" type="button"
+                             process ="@this" onclick="exclusaoResponsavelEmpresa.hide()" ajax ="true"/>
+
+            <p:commandButton id="confirmExclusao" process ="@this" ajax ="true"
+                             actionListener="#{responsavelEmpresaNavegacaoControle.apagar}" value="#{msg.botao_sim}"
+                             update="formPrincipal:tabelaResponsavelEmpresa" oncomplete="exclusaoResponsavelEmpresa.hide()" >
+
+            </p:commandButton>
+        </h:panelGrid>
+    </p:dialog>
+</ui:composition>

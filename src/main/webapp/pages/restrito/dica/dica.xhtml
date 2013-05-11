@@ -1,0 +1,107 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/sonolucroTemplateInterno.xhtml">
+
+    <ui:define name ="corpo">
+        <h:form id ="formPrincipal">
+            <h:panelGrid id ="gridDicaPrincipal" columns ="1" style ="width:100%">
+                <p:fieldset id ="fieldSetGrupo" legend="#{msg.dica_cadastro_dica}" toggleable="true" toggleSpeed="500">
+
+                    <p:messages id ="messageCadastroDica" autoUpdate="true" severity="info, error"/>
+
+                    <h:panelGrid id ="gridDicaCadastro" cellspacing="10" columns ="6">
+                        <h:outputLabel value ="*#{msg.dica_titulo}"/>
+                        <p:inputText id ="tituloDica" value ="#{dicaNavegacao.dica.titulo}" required ="true">
+                            <f:validateLength minimum="2" maximum="25" />
+                        </p:inputText>
+                        <p:message for = "tituloDica" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.dica_autor}" for ="autorDica"/>
+                        <p:inputText id ="autorDica" value ="#{dicaNavegacao.dica.autor}" maxlength="50"/>
+                        <p:message for ="autorDica" display="icon"/>
+
+                        <h:outputLabel value ="*#{msg.dica_texto}"/>
+                        <h:panelGrid columns = "1">
+                            <p:inputTextarea id="textoDica" rows="10" cols="50" 
+                                             value="#{dicaNavegacao.dica.texto}"
+                                             counter="counterTextoDica" maxlength="2000"       
+                                             counterTemplate="{0} #{msg.mensagem_texto_area}" 
+                                             autoResize="false" required ="true"/>  
+                            <h:outputText id="counterTextoDica" />
+                        </h:panelGrid>  
+                        <p:message for ="textoDica" display ="icon"/>
+
+                        <h:outputLabel value ="*#{msg.dica_idioma}"/>
+                        <p:selectOneMenu id ="idiomaDica" value ="#{dicaNavegacao.idiomaItemSelecinado}" required ="true">
+                            <f:selectItem itemValue ="0" itemLabel =""/>
+                            <f:selectItems value ="#{dicaNavegacao.idiomasItem}"/>
+                        </p:selectOneMenu>
+                        <p:message for ="idiomaDica" display="icon"/>
+
+                        <h:outputLabel value ="*#{msg.dica_categoria}"/>
+
+                        <p:selectOneMenu id ="categoriaDica" value ="#{dicaNavegacao.categoriaItemSelecionado}" required ="true">
+                            <f:selectItem itemValue ="0" itemLabel=""/>
+                            <f:selectItems value ="#{dicaNavegacao.categoriasItem}"/>
+                        </p:selectOneMenu>
+                        <p:message for ="categoriaDica" display="icon"/>
+
+                        <h:outputLabel/>
+                        <h:outputLabel/>
+                        <h:outputLabel/>
+
+                        <p:commandButton value ="#{msg.botao_salvar}" actionListener ="#{dicaNavegacaoControle.salvar}"
+                                         process ="gridDicaCadastro" update ="gridDicaPrincipal"/>
+                    </h:panelGrid>
+                </p:fieldset>
+
+                <p:dataTable id ="tabelaDicas" value ="#{dicaNavegacao.dicas}" var ="dica" paginator="true"
+                             rows="8" emptyMessage="#{msg.tabela_msg_vazia}" style="text-align: center;">
+                    <f:facet name ="header">#{msg.dica_titulo_dica}</f:facet>
+
+                    <p:column headerText="#{msg.dica_titulo}" filterBy="#{dica.titulo}">
+                        <h:outputLabel value ="#{dica.titulo}"/>
+                    </p:column>
+
+                    <p:column headerText ="#{msg.dica_idioma}" filterBy="#{dica.idioma.sigla}">
+                        <h:outputLabel value ="#{dica.idioma.sigla}"/>
+                    </p:column>
+
+                    <p:column headerText ="#{msg.dica_categoria}" filterBy="#{dica.categoriaStr}">
+                        <h:outputLabel value ="#{dica.categoriaStr}"/>
+                    </p:column>
+
+                    <p:column headerText ="#{msg.dica_texto}" filterBy="#{dica.resumoTexto}">
+                        <h:outputText value ="#{dica.resumoTexto} ..."/>
+                    </p:column>
+
+                    <p:column headerText ="#{msg.tabela_coluna_editar}">
+                        <p:commandLink actionListener="#{dicaNavegacaoControle.preparaAlteracao}"
+                                       process ="@this" onclick="alteracaoDica.show()" type="button" update =":formPrincipal:gridDicaAltera">
+                            <f:attribute name ="dica" value="#{dica}"/>
+                            <h:graphicImage library="imagens" name="editar.jpg" width="15px"
+                                            height="15px" />
+
+                        </p:commandLink>
+                    </p:column>
+
+                    <p:column headerText="#{msg.tabela_coluna_apagar}">
+                        <p:commandLink actionListener="#{dicaNavegacaoControle.preparaAlteracao}"
+                                       process ="@this" onclick="exclusaoDica.show()" type="button" update =":formPrincipal:gridDicaApaga">
+                            <f:attribute name ="dica" value="#{dica}"/>
+                            <h:graphicImage library="imagens" name="excluir.jpg" width="15px"
+                                            height="15px" />
+                        </p:commandLink>
+                    </p:column>
+                </p:dataTable>
+            </h:panelGrid>
+
+            <ui:include src ="/pages/restrito/dica/dicaEdicao.xhtml"/>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

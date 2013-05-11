@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding='utf-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        
+        <title>Opniões - Só No Lucro</title>
+    </h:head>
+
+    <h:body>
+            <div id="fb-root"></div>
+            
+            <!-- script facebook -->
+<script>
+    (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/pt_BR/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+</script>
+            <!-- fim de script facebook -->
+            
+            
+        <br /><h5 align="center"><font face="Verdana, Geneva, sans-serif">Opnião dos usuários:</font></h5><br/>
+
+     <br />    
+     
+    <div class="fb-comments" data-href="http://www.facebook.com/SoNoLucro" data-width="470" data-num-posts="10"></div>
+        <h:graphicImage library="imagens" name="eua_in.jpg" />      
+        
+     
+    </h:body>
+</html>

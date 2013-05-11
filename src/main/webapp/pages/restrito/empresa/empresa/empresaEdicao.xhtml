@@ -1,0 +1,152 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/sonolucroTemplateInterno.xhtml">
+
+    <ui:define name ="corpo">
+
+        <h:form id ="formPrincipal">
+            <h:panelGrid id ="gridEmpresaEdicao" columns ="1" style ="width:100%">
+                <p:fieldset id="fieldsetEmpresaAltera" legend="#{msg.empresa_cadastro_empresa}" toggleable="true" toggleSpeed="500">
+
+
+                    <p:messages id ="messageEdicaoEmpresa" autoUpdate="true" severity="info, error"/>
+
+                    <h:panelGrid id ="gridEmpresaAltera" columns ="6" cellspacing="10">
+
+
+                        <h:outputLabel value ="#{msg.empresa_nome_fantasia}" for="nomeFantasiaEmpresaAltera"/>
+                        <p:inputText id ="nomeFantasiaEmpresaAltera" value ="#{empresaNavegacao.empresa.nomeFantasia}" required ="true"/>
+                        <p:message for ="nomeFantasiaEmpresaAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_cnpj}" for ="cnpjEmpresaAltera"/>
+                        <p:inputText id ="cnpjEmpresaAltera" value ="#{empresaNavegacao.empresa.cnpj}"/>
+                        <p:message for ="cnpjEmpresaAltera" display ="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_tipo}" for ="tipoEmpresaAltera"/>
+                        <p:selectOneMenu id ="tipoEmpresaAltera" value ="#{empresaNavegacao.tipoItemSelecionado}">
+                            <f:selectItem itemValue ="0" itemLabel =""/>
+                            <f:selectItems value ="#{empresaNavegacao.tiposItem}"/>
+                        </p:selectOneMenu>
+                        <p:message for ="tipoEmpresaAltera" display ="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_descricao}" for ="descricaoEmpresaAltera"/>
+                        <h:panelGrid columns = "1">
+                            <p:inputTextarea id="descricaoEmpresaAltera" rows="5" cols="30" 
+                                             value="#{empresaNavegacao.empresa.descricao}"
+                                             counter="counterDescricaoEmpresaAltera" maxlength="200"       
+                                             counterTemplate="{0} #{msg.mensagem_texto_area}"
+                                             autoResize="false"/>  
+                            <h:outputText id="counterDescricaoEmpresaAltera" />
+                        </h:panelGrid>  
+                        <p:message for ="descricaoEmpresaAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_e_cliente}" for ="nossoClienteEmpresaAltera"/>
+                        <p:selectOneMenu id ="nossoClienteEmpresaAltera" value ="#{empresaNavegacao.nossoClienteItemSelecionado}">
+                            <f:selectItem itemValue ="0" itemLabel =""/>
+                            <f:selectItem itemValue ="1" itemLabel ="#{msg.empresa_e_cliente_sim}"/>
+                            <f:selectItem itemValue ="2" itemLabel ="#{msg.empresa_e_cliente_nao}"/>
+                        </p:selectOneMenu>
+                        <p:message for ="nossoClienteEmpresaAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_telefone}" for ="telefoneEmpresaAltera"/>
+                        <p:inputText id ="telefoneEmpresaAltera" value ="#{empresaNavegacao.empresa.telefone}"/>
+                        <p:message for ="telefoneEmpresaAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_email}" for ="emailEmpresaAltera"/>
+                        <p:inputText id ="emailEmpresaAltera" value ="#{empresaNavegacao.empresa.email}"/>
+                        <p:message for ="emailEmpresaAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_localidade}" for ="gridLocalidadeEmpresaAltera"/>
+
+                        <h:panelGrid id ="gridLocalidadeEmpresaAltera" columns ="1">
+                            <h:outputLabel value ="#{msg.empresa_pais}" for ="paisEmpresaAltera"/>
+                            <p:selectOneMenu id ="paisEmpresaAltera" value ="#{empresaNavegacao.paisItemSelecionado}">
+                                <f:selectItem itemValue ="0" itemLabel=""/>
+                                <f:selectItems value ="#{empresaNavegacao.paisesItem}"/>
+                                <p:ajax listener="#{empresaNavegacaoControle.iniciarEstados}" process="@this" 
+                                        update =":formPrincipal:estadoEmpresaAltera"/>
+                            </p:selectOneMenu>
+                            <p:message for ="paisEmpresaAltera" display="icon"/>
+
+                            <h:outputLabel value ="#{msg.empresa_estado}" for ="estadoEmpresaAltera"/>
+                            <p:selectOneMenu id ="estadoEmpresaAltera" value ="#{empresaNavegacao.estadoItemSelecionado}">
+                                <f:selectItem itemValue ="0" itemLabel =""/>
+                                <f:selectItems value ="#{empresaNavegacao.estadosItem}"/>
+                                <p:ajax listener = "#{empresaNavegacaoControle.iniciarCidades}" process ="@this" 
+                                        update =":formPrincipal:cidadeEmpresaAltera"/>
+                            </p:selectOneMenu>
+                            <p:message for ="estadoEmpresaAltera" display="icon"/>
+
+                            <h:outputLabel value ="#{msg.empresa_cidade}" for ="cidadeEmpresaAltera"/>
+                            <p:selectOneMenu id ="cidadeEmpresaAltera" value ="#{empresaNavegacao.cidadeItemSelecionado}">
+                                <f:selectItem itemValue ="0" itemLabel=""/>
+                                <f:selectItems value ="#{empresaNavegacao.cidadesItem}"/>
+                            </p:selectOneMenu>
+                            <p:message for ="cidadeEmpresaAltera" display="icon"/>
+                        </h:panelGrid>
+
+                        <p:message for ="gridLocalidadeEmpresaAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_pessoa_responsavel}" for ="dataGridResponsaveisEmpresaAltera"/>
+
+                        <p:dataGrid id ="dataGridResponsaveisEmpresaAltera" value="#{empresaNavegacao.responsaveisSelecionados}" var ="responsavel" 
+                                    columns ="1" emptyMessage="Nenhum responsável selecionado" rows="2" paginator="true" pageLinks="2">
+                            <f:facet name ="header">
+                                <p:commandButton id ="linkResponsavelEmpresaAltera" value =" + "  
+                                                 onclick="modalResponsavelEmpresa.show()" 
+                                                 process ="@this"
+                                                 update =":formPrincipal:tabelaPesquisaResponsavelEmpresa">
+                                </p:commandButton>
+                            </f:facet>
+
+                            <p:column>
+                                <p:commandButton id ="linkRemoverResponsavelEmpresaAltera" value =" - "
+                                                 actionListener ="#{empresaNavegacaoControle.removerResponsavelEmpresa}"
+                                                 process ="@this" update ="dataGridResponsaveisEmpresaAltera">
+                                    <f:attribute name="responsavel" value ="#{responsavel}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                            <p:column>
+                                <h:outputLabel value ="#{responsavel.nome}"/>
+                            </p:column>
+                        </p:dataGrid>
+
+                        <p:message for ="dataGridResponsaveisEmpresaAltera" display ="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_status}" for ="statusEmpresaAltera"/>
+
+                        <p:selectOneMenu id ="statusEmpresaAltera" value ="#{empresaNavegacao.statusItemSelecionado}" required ="true">
+                            <f:selectItem itemValue ="0" itemLabel =""/>
+                            <f:selectItem itemValue ="1" itemLabel ="#{msg.empresa_status_ativada}"/>
+                            <f:selectItem itemValue ="2" itemLabel ="#{msg.empresa_status_desativada}"/>
+                        </p:selectOneMenu>
+
+                        <p:message for ="statusEmpresaAltera" display="icon"/>
+
+                        <h:outputLabel/>
+                        <h:outputLabel/>
+                        <h:outputLabel/>
+
+                        <p:commandButton value ="#{msg.botao_voltar}" process ="@this" 
+                                         action ="#{empresaNavegacaoControle.irParaTelaEmpresa}"/>
+
+                        <p:commandButton value ="#{msg.botao_salvar}" process ="gridEmpresaAltera"
+                                         update ="gridEmpresaAltera"
+                                         actionListener ="#{empresaNavegacaoControle.alterar}"/>
+                    </h:panelGrid>
+
+                </p:fieldset>
+            </h:panelGrid>
+
+            <ui:include src ="/pages/restrito/empresa/empresa/modalResponsavelEmpresaPesquisa.xhtml"/>
+        </h:form>
+
+    </ui:define>
+
+
+
+</ui:composition>

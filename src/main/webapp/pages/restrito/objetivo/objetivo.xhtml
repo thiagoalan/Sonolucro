@@ -1,0 +1,145 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/sonolucroTemplateInterno.xhtml">
+
+    <ui:define name="corpo" >
+
+        <h:form id ="formPrincipal">
+
+            <h:panelGrid id ="gridObjetivoPrincipal" columns ="1" style ="width: 100%;">
+
+                <p:fieldset id ="fieldsetObjetivo" legend="#{msg.objetivo_cadastro}" 
+                            toggleSpeed="500" toggleable="true" >
+
+                    <p:messages id ="messageCadastroObjetivo" autoUpdate="true" 
+                                closable="true" severity="info, error"/>
+
+                    <h:panelGrid id ="gridObjetivoCadastro" columns ="6" cellpadding="15">
+
+                        <h:outputLabel value ="*#{msg.objetivo_titulo}" for ="tituloObjetivoCadastro"/>
+                        <p:inputText id ="tituloObjetivoCadastro" value ="#{objetivoNavegacao.objetivo.titulo}" 
+                                     maxlength="35" required ="true"/>
+                        <p:message for ="tituloObjetivoCadastro" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.objetivo_descricao}" for ="descricaoObjetivoCadastro"/>
+                        <h:panelGrid columns = "1">
+                            <p:inputTextarea id="descricaoObjetivoCadastro" rows="5" cols="30" 
+                                             value="#{objetivoNavegacao.objetivo.descricao}"
+                                             counter="counterDescricaoObjetivoCadastro" maxlength="200"       
+                                             counterTemplate="{0} #{msg.mensagem_texto_area}"
+                                             autoResize="false"/>  
+                            <h:outputText id="counterDescricaoObjetivoCadastro" />
+                        </h:panelGrid>  
+                        <p:message for ="descricaoObjetivoCadastro" display="icon"/>
+
+                        <h:outputLabel value ="*#{msg.objetivo_valor_total}" for ="valorObjetivoCadastro"/>
+                        <p:inputText id ="valorObjetivoCadastro" 
+                                     value ="#{objetivoNavegacao.valorTotalStr}"
+                                     onkeypress="return (mascaraMoeda(this,'.',',',event))" 
+                                     required ="true"/>
+                        <p:message for ="valorObjetivoCadastro" display="icon"/>
+
+                        <h:outputLabel value ="*#{msg.objetivo_data_inicial_prevista}" for ="inicioPrevistoObjetivoCadastro"/>
+                        <p:calendar id="inicioPrevistoObjetivoCadastro" value ="#{objetivoNavegacao.objetivo.dataInicialPrevista}" 
+                                    mode="popup"  pattern="dd/MM/yyyy" navigator="true"/>
+                        <p:message for ="inicioPrevistoObjetivoCadastro" display="icon"/>
+
+                        <h:outputLabel value ="*#{msg.objetivo_data_final_prevista}" for ="fimPrevistoObjetivoCadastro"/>
+                        <p:calendar id ="fimPrevistoObjetivoCadastro" value ="#{objetivoNavegacao.objetivo.dataFinalPrevista}"
+                                    mode ="popup" pattern="dd/MM/yyyy" navigator="true"/>
+                        <p:message for ="fimPrevistoObjetivoCadastro" display="icon"/>
+                        
+                        <h:outputLabel value =""/>
+                        <h:outputLabel value =""/>
+                        <h:outputLabel value =""/>                        
+
+                        <p:commandButton value="#{msg.botao_salvar}" actionListener="#{objetivoNavegacaoControle.salvar}"
+                                         process ="gridObjetivoCadastro" update ="gridObjetivoPrincipal"/>
+
+                    </h:panelGrid>
+
+                </p:fieldset>
+                
+                <p:separator/>
+
+                <p:dataTable id ="tabelaObjetivos" value ="#{objetivoNavegacao.objetivos}" var ="objetivo" paginator="true" 
+                             rows="8" pageLinks="3" emptyMessage="#{msg.tabela_msg_vazia}" style="text-align: center;">
+                    <f:facet name="header">
+                        <h:outputLabel value ="#{msg.objetivo_objetivos}"/>
+                    </f:facet>
+
+                    <p:column headerText="#{msg.objetivo_titulo}" filterBy="#{objetivo.titulo}">
+                        <h:outputText value ="#{objetivo.titulo}"/>
+                    </p:column>
+
+                    <p:column headerText="#{msg.objetivo_status}">
+                        <h:panelGrid style="text-align: center; max-width: 250px;">
+                            <h:outputLabel value ="#{objetivo.statusStr}"/>
+                            <p:progressBar value="#{objetivo.totalPorcento}" interval="100" style="width: 99%"/>
+                        </h:panelGrid>
+                    </p:column>
+
+                    <p:column headerText="#{msg.objetivo_valor_guardado}">
+                        <h:outputText value ="#{objetivo.valorTotalGuardadoStr}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="#{msg.objetivo_valor_total}">
+                        <h:outputText value ="#{objetivo.valorTotal}">
+                            <f:convertNumber type="currency"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="#{msg.tabela_coluna_editar}">
+
+                        <p:commandLink action="#{objetivoNavegacaoControle.irParaTelaEdicao}"
+                                       process ="@this"  type="button" >
+                            <f:attribute name ="objetivo" value="#{objetivo}"/>
+                            <h:graphicImage library="imagens" name="editar.jpg" width="15px"
+                                            height="15px" />
+
+                        </p:commandLink>
+
+                    </p:column>
+
+                    <p:column headerText="#{msg.tabela_coluna_apagar}">
+
+                        <p:commandLink actionListener="#{objetivoNavegacaoControle.preparaAlteracao}"
+                                       process ="@this" onclick="exclusaoObjetivo.show()" type="button" update =":formPrincipal:gridObjetivoApaga">
+                            <f:attribute name ="objetivo" value="#{objetivo}"/>
+                            <h:graphicImage library="imagens" name="excluir.jpg" width="15px"
+                                            height="15px" />
+                        </p:commandLink>
+                    </p:column>
+
+                </p:dataTable>
+
+            </h:panelGrid>
+
+            <p:dialog id="excluiObjetivoDialog" header="#{msg.objetivo_excluir}" 
+                      widgetVar="exclusaoObjetivo" showEffect="slide" hideEffect="slide">
+
+                <h:outputLabel value ="#{msg.objetivo_msg_confirma_exclusao}?"/>
+                <br/>
+                <h:panelGrid id ="gridObjetivoApaga" columns="2">
+                    <p:commandButton  value="#{msg.botao_cancelar}" type="button"
+                                      process ="@this" onclick="exclusaoObjetivo.hide()"/>
+
+                    <p:commandButton  process ="@this"
+                                      actionListener="#{objetivoNavegacaoControle.apagar}" value="#{msg.botao_sim}"
+                                      update=":formPrincipal:tabelaObjetivos :formPrincipal:messageCadastroObjetivo"
+                                      oncomplete="exclusaoObjetivo.hide()" >
+
+                    </p:commandButton>
+                </h:panelGrid>
+
+            </p:dialog>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

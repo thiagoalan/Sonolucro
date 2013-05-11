@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id="viusalizaMovimentacaoDialog" header="#{msg.movimentacao_pane_visualizar}" 
+              widgetVar="visualizacaoMovimentacao" style = "width:300px" showEffect="clip" hideEffect="clip">
+
+        <h:panelGrid id ="gridMovimentacaoVisualizacao" columns="9" cellpadding="10">
+
+            <h:outputLabel value="#{msg.movimentacao_valor}" for="valorMovimentacaoVisualiza"
+                           styleClass="labelMovVisualiza"/>
+            <h:outputText id="valorMovimentacaoVisualiza" styleClass="textoMovVisualiza"
+                          value="#{movimentacaoNavegacao.movimentacao.valor}">
+                <f:convertNumber maxFractionDigits="2" type="currency"/>
+            </h:outputText>
+            <p:message for ="valorMovimentacaoVisualiza"/>
+
+            <h:outputLabel value="#{msg.movimentacao_conta}" for="contaMovimentacaoVisualiza" 
+                           styleClass="labelMovVisualiza"/>
+            <h:outputText id="contaMovimentacaoVisualiza" styleClass="textoMovVisualiza"
+                          value="#{movimentacaoNavegacao.movimentacao.conta.nome}" />
+            <p:message for ="contaMovimentacaoVisualiza"/>
+
+            <h:outputLabel value ="#{msg.movimentacao_cartao_credito}" 
+                           for ="gridCartaoMovVizualiza"
+                           styleClass="labelMovVisualiza"/>
+            <h:panelGrid id ="gridCartaoMovVizualiza">
+                <h:outputText  styleClass="textoMovVisualiza"
+                               value ="#{movimentacaoNavegacao.movimentacao.cartao}"
+                               rendered="#{not empty movimentacaoNavegacao.movimentacao.cartao}"/>
+
+                <h:outputText styleClass="textoMovVisualiza"
+                              value ="sem cartão"
+                              rendered="#{empty movimentacaoNavegacao.movimentacao.cartao}"/>
+            </h:panelGrid>
+            <p:message for ="gridCartaoMovVizualiza"/>
+
+            <h:outputLabel value="#{msg.movimentacao_data_lancamento}" for="dataLancamentoMovimentacaoVisualiza" 
+                           styleClass="labelMovVisualiza"/>
+            <h:outputText id="dataLancamentoMovimentacaoVisualiza"
+                          value="#{movimentacaoNavegacao.movimentacao.dataLancamento}" 
+                          styleClass="textoMovVisualiza">
+                <f:convertDateTime pattern="dd/MM/yyyy" />
+            </h:outputText>
+            <p:message for ="dataLancamentoMovimentacaoVisualiza"/>
+
+            <h:outputLabel value="#{msg.movimentacao_data_vencimento}"
+                           for="dataVencimentoMovimentacaoVisualiza" styleClass="labelMovVisualiza" />
+            <h:outputText id="dataVencimentoMovimentacaoVisualiza" styleClass="textoMovVisualiza"
+                          value="#{movimentacaoNavegacao.movimentacao.dataVencimento}">
+                <f:convertDateTime pattern="dd/MM/yyyy" />
+            </h:outputText>
+            <p:message for ="dataVencimentoMovimentacaoVisualiza"/>
+
+            <h:outputLabel value="#{msg.movimentacao_credito}" 
+                           for="creditoMovimentacaoVisualiza" styleClass="labelMovVisualiza" />
+            <h:outputText id="creditoMovimentacaoVisualiza" styleClass="textoMovVisualiza"
+                          value="#{movimentacaoNavegacao.movimentacao.credito}">
+                <f:convertNumber maxFractionDigits="2" type="currency"/>
+            </h:outputText>
+            <p:message for ="creditoMovimentacaoVisualiza"/>
+
+            <h:outputLabel value="#{msg.movimentacao_debito}" for="debitoMovimentacaoVisualiza"
+                           styleClass="labelMovVisualiza"/>
+            <h:outputText id="debitoMovimentacaoVisualiza" styleClass="textoMovVisualiza"
+                          value="#{movimentacaoNavegacao.movimentacao.debito}">
+                <f:convertNumber maxFractionDigits="2" type="currency"/>
+            </h:outputText>
+            <p:message for ="debitoMovimentacaoVisualiza"/>
+
+            <h:outputLabel value="#{msg.movimentacao_descricao}" 
+                           for="descricaoMovimentacaoVisualiza" styleClass="labelMovVisualiza"/>
+            <h:outputText id="descricaoMovimentacaoVisualiza" styleClass="textoMovVisualiza"
+                          value="#{movimentacaoNavegacao.movimentacao.descricao}" />
+            <p:message for ="descricaoMovimentacaoVisualiza"/>
+
+            <h:outputLabel value="#{msg.movimentacao_sequencia}" for="sequenciaMovimentacaoVisualiza"
+                           styleClass="labelMovVisualiza"/>
+            <h:outputText id="sequenciaMovimentacaoVisualiza" styleClass="textoMovVisualiza"
+                          value="#{movimentacaoNavegacao.movimentacao.sequencia}" />
+            <p:message for ="sequenciaMovimentacaoVisualiza"/>
+
+        </h:panelGrid>
+    </p:dialog>
+
+</ui:composition>

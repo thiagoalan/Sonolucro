@@ -1,0 +1,65 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id="editaFaturasDialog" header="#{msg.cartao_faturas_cartao}"
+              widgetVar="faturasCartao" showEffect="clip" hideEffect="clip">
+
+        <h:panelGrid id ="gridFaturasPrincipal" style ="min-width: 350px">
+            <p:dataTable id ="tabelaFaturas" value ="#{cartaoNavegacao.cartao.faturas}"
+                         var ="fatura" paginator="true" scrollRows="3" rows ="4" emptyMessage="#{msg.tabela_msg_vazia}">
+                <p:column sortBy="#{fatura.dataInicial}">
+                    <f:facet name ="header">#{msg.cartao_faturas_de}</f:facet>
+                    <h:outputLabel value ="#{fatura.dataInicial}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputLabel>
+                </p:column>
+
+                <p:column sortBy="#{fatura.dataFinal}">
+                    <f:facet name ="header">#{msg.cartao_faturas_ate}</f:facet>
+                    <h:outputLabel value ="#{fatura.dataFinal}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                    </h:outputLabel>
+                </p:column>
+
+                <p:column>
+                    <f:facet name ="header">#{msg.menu_movimentacoes} #{fatura.movimentacoes.size}</f:facet>
+                    <p:dataList value="#{fatura.movimentacoes}" var ="mov" rows="5" paginator="false">
+                        <h:panelGrid columns ="2">
+                            <h:outputLabel value ="#{mov.conta.nome}"/>
+                            <h:outputLabel value ="#{mov.valor}">
+                                <f:convertNumber maxFractionDigits="2" type="currency"/>
+                            </h:outputLabel>
+                        </h:panelGrid>
+                    </p:dataList>
+                </p:column>
+
+                <p:column sortBy ="#{fatura.valorTotal}">
+                    <f:facet name ="header">#{msg.cartao_faturas_valor_total}</f:facet>
+                    <h:outputLabel value ="#{fatura.valorTotal}">
+                        <f:convertNumber maxFractionDigits="2" type="currency"/>
+                    </h:outputLabel>
+                </p:column>
+
+                <p:column>
+                    <f:facet name ="header">#{msg.cartao_faturas_valor_pago}</f:facet>
+                    <p:inputText id ="valorPagoFatura" value ="#{fatura.valorPagoStr}" onkeypress="return(mascaraMoeda(this,'.',',',event))"/>
+                </p:column>
+
+
+                <p:column >
+                    <f:facet name ="header">#{msg.botao_salvar}</f:facet>
+                    <p:commandButton value ="#{msg.botao_salvar}" process ="@this valorPagoFatura"
+                                     update =":formPrincipal:tabelaCartoes" 
+                                     actionListener ="#{cartaoNavegacaoControle.alterarFatura}" oncomplete="faturasCartao.hide()">
+                        <f:attribute name ="fatura" value="#{fatura}"/>
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+        </h:panelGrid>
+    </p:dialog>
+
+</ui:composition>

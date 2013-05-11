@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id ="agendaMovimentacaoCadastroDialog" widgetVar="agendaMovimentacaoCadastroDialog" 
+              header="#{msg.movimentacao_cadastro_movimentacao}" hideEffect="explode" showEffect="explode">
+
+        <h:panelGrid id="gridMovimentacaoCadastro" columns="9" cellspacing="15">
+
+            <h:outputLabel value="*#{msg.movimentacao_valor}" for="valorMovimentacao" />
+            <p:inputText id="valorMovimentacao"
+                         value="#{movimentacaoNavegacao.valorStr}"
+                         required ="true" onkeypress="return(mascaraMoeda(this,'.',',',event))">                            
+            </p:inputText>
+            <p:message for="valorMovimentacao" display="icon"/>
+
+            <h:outputLabel value="*#{msg.movimentacao_contas}" for="contaMovimentacao" />
+            <p:selectOneMenu id="contaMovimentacao" required = "true"
+                             value="#{movimentacaoNavegacao.contaItemSelecionado}">
+                <f:selectItem itemValue ="" itemLabel =""/>
+                <f:selectItems value="#{movimentacaoNavegacao.contasItem}" />
+            </p:selectOneMenu>
+            <p:message for="contaMovimentacao" display="icon"/>
+
+            <h:outputLabel value="#{msg.movimentacao_cartoes}" for="cartoesMovimentacao" />
+            <p:selectOneMenu id ="cartoesMovimentacao" value ="#{movimentacaoNavegacao.cartaoItemSelecionado}" >
+                <f:selectItem itemValue="0" itemLabel =""/>
+                <f:selectItems value ="#{movimentacaoNavegacao.cartoesItem}"/>
+            </p:selectOneMenu>
+            <p:message for="cartoesMovimentacao" />
+
+
+            <h:outputLabel value="*#{msg.movimentacao_data}" for="dataVencimentoMovimentacao" />
+            <p:calendar id="dataVencimentoMovimentacao" pattern="dd/MM/yyyy"
+                        value="#{movimentacaoNavegacao.movimentacao.dataVencimento}"
+                        required="true" mode="popup"/>
+            <p:message for="dataVencimentoMovimentacao" display="icon"/>
+
+            <h:outputLabel value="#{msg.movimentacao_descricao}" for="descricaoMovimentacao" />
+            <h:panelGrid columns = "1">
+                <p:inputTextarea id="descricaoMovimentacao" rows="4" cols="20" 
+                                 value="#{movimentacaoNavegacao.movimentacao.descricao}"
+                                 counter="counterDescricaoMovimentacao" maxlength="50"       
+                                 counterTemplate="{0} #{msg.mensagem_texto_area}" autoResize="false"/>  
+                <h:outputText id="counterDescricaoMovimentacao" />
+            </h:panelGrid>  
+            <p:message for="descricaoMovimentacao" display="icon"/>
+
+            <h:outputLabel value="#{msg.movimentacao_sequencia}" for="sequenciaMovimentacao" />
+            <p:spinner id="sequenciaMovimentacao"
+                       value="#{movimentacaoNavegacao.movimentacao.sequencia}" min="1"
+                       max="500" required="true" />
+            <p:message for="sequenciaMovimentacao" display="icon"/>
+
+            <h:outputLabel value =""/>
+
+            <h:panelGrid columns ="3">
+                <p:commandButton value ="#{msg.botao_cancelar}" onclick="agendaMovimentacaoCadastroDialog.hide()"
+                                 process ="@this"/>
+
+                <p:commandButton value ="#{msg.botao_apagar}" rendered="#{movimentacaoNavegacao.alteracao}"
+                                 actionListener ="#{agendaMovimentacaoNavegacaoControle.apagar}"
+                                 oncomplete="agendaMovimentacaoCadastroDialog.hide(); agendaFinanceira.update();" 
+                                 process ="@this"/>
+
+                <p:commandButton rendered="#{movimentacaoNavegacao.alteracao}"
+                                 actionListener="#{agendaMovimentacaoNavegacaoControle.alterar}"
+                                 process ="gridMovimentacaoCadastro" value="#{msg.botao_salvar}"
+                                 oncomplete="agendaMovimentacaoCadastroDialog.hide(); agendaFinanceira.update();"/>
+
+                <p:commandButton rendered="#{! movimentacaoNavegacao.alteracao}"
+                                 actionListener="#{agendaMovimentacaoNavegacaoControle.salvar}"
+                                 process ="gridMovimentacaoCadastro" value="#{msg.botao_salvar}"
+                                 oncomplete="agendaMovimentacaoCadastroDialog.hide(); agendaFinanceira.update();"/>
+
+
+            </h:panelGrid>
+
+        </h:panelGrid>
+    </p:dialog>
+</ui:composition>

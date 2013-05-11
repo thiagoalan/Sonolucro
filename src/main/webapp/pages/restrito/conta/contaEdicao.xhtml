@@ -1,0 +1,77 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <p:dialog id="editaContaDialog" header="#{msg.conta_pane_editar}"
+              widgetVar="alteracaoConta" showEffect="slide" hideEffect="slide">
+     
+        <h:panelGrid id ="gridContaAltera" columns="6" cellpadding="10">
+                <h:outputLabel value="*#{msg.conta_nome}" for="nomeContaAltera" />
+                <p:inputText id="nomeContaAltera" value="#{contaNavegacao.conta.nome}" required="true">
+                    <f:validateLength minimum="3" maximum="25"/>
+                </p:inputText>
+                <p:message for="nomeContaAltera" display="icon"/>
+
+                <h:outputLabel value="*#{msg.conta_tipo}" for="tipoContaAltera" />
+
+                <p:selectOneMenu id="tipoContaAltera"
+                                 value="#{contaNavegacao.conta.tipo}" required="true">
+                    <f:selectItems value="#{contaNavegacao.tiposItem}" />
+                   
+                </p:selectOneMenu>
+                <p:message for="tipoContaAltera" display="icon"/>
+
+                <h:outputLabel value="*#{msg.conta_status}" for="statusContaAltera" />
+                <p:selectOneMenu id="statusContaAltera" value="#{contaNavegacao.statusItemSelecionado}">
+                    <f:selectItem itemValue="1" itemLabel="#{msg.conta_status_ativado}" />
+                    <f:selectItem itemValue="2" itemLabel="#{msg.conta_status_desativado}" />
+                </p:selectOneMenu>
+                <p:message for="statusContaAltera" display="icon" />
+
+                <h:outputLabel value="*#{msg.conta_grupos}" for="grupoContaAltera" />
+                <p:selectOneMenu id="grupoContaAltera" required ="true" 
+                                 value="#{contaNavegacao.grupoItemSelecionado}">
+                    <f:selectItem itemValue ="" itemLabel =""/>
+                    <f:selectItems value="#{contaNavegacao.gruposItem}" />
+                </p:selectOneMenu>
+                <p:message for="grupoContaAltera" display="icon" />
+
+                <p:commandButton id="declineContaAlteracao" value="#{msg.botao_cancelar}"
+                                 process ="@this" onclick="alteracaoConta.hide()" type="button" />
+
+                <p:commandButton id="confirmContaAlteracao" process ="gridContaAltera"
+                                 actionListener="#{contaNavegacaoControle.alterar}" value="#{msg.botao_salvar}"
+                                 update=":formPrincipal:tabelaContas" oncomplete="alteracaoConta.hide()">
+
+                </p:commandButton>
+
+            </h:panelGrid>
+      
+    </p:dialog>
+
+    <p:dialog id="excluiContaDialog" showEffect="slide" hideEffect="slide"
+              header="#{msg.conta_pane_apagar}" widgetVar="exclusaoConta">
+
+            <h:outputLabel value ="#{msg.conta_msg_confirma_exclusao}?"/>
+
+            <br/>
+
+            <h:panelGrid id ="gridContaApaga" columns="2">
+
+                <p:commandButton id="declineExclusao" value="#{msg.botao_cancelar}"
+                                 process ="@this" onclick="exclusaoConta.hide()" type="button" />
+
+                <p:commandButton id="confirmExlusao" process ="gridContaApaga"
+                                 actionListener="#{contaNavegacaoControle.apagar}" value="#{msg.botao_sim}"
+                                 update=":formPrincipal:tabelaContas" oncomplete="exclusaoConta.hide()">
+                </p:commandButton>
+
+
+            </h:panelGrid>
+
+    </p:dialog>
+
+</ui:composition>

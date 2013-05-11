@@ -1,0 +1,83 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id="editaCartaoDialog" header="#{msg.cartao_pane_editar}"
+              widgetVar="alteracaoCartao" showEffect="slide" hideEffect="slide">
+        
+        <h:panelGrid id ="gridCartaoAltera" columns="6" cellpadding="10">
+                <h:outputLabel value="*#{msg.cartao_nome}" for="nomeCartaoAltera" />
+                <p:inputText id="nomeCartaoAltera"
+                             value="#{cartaoNavegacao.cartao.nome}" required="true">
+                    <f:validateLength minimum="3" maximum="25"/>
+                </p:inputText>
+                <p:message for="nomeCartaoAltera" />
+
+                <h:outputLabel value="#{msg.cartao_descricao}" for="descricaoCartaoAltera" />
+                <p:inputText id="descricaoCartaoAltera"
+                             value="#{cartaoNavegacao.cartao.descricao}" />
+                <p:message for="descricaoCartaoAltera" display="icon"/>
+
+                <h:outputLabel value="*#{msg.cartao_limite}" for="limiteCartaoAltera" />
+                <p:inputText id="limiteCartaoAltera"
+                             value="#{cartaoNavegacao.cartao.limite}" 
+                             onkeypress="return (mascaraMoeda(this,'','',event))" required="true"/>
+                   
+                <p:message for="limiteCartaoAltera" />
+
+                <h:outputLabel value ="*#{msg.cartao_dia_vencimento}" for ="diaVencimentoCartaoAltera"/>
+                <p:spinner id="diaVencimentoCartaoAltera"
+                           value="#{cartaoNavegacao.cartao.diaVencimento}" min="1"
+                           max="25" required="true" />
+                <p:message for ="diaVencimentoCartaoAltera" display="icon"/>
+
+                <h:outputLabel value ="*#{msg.cartao_dia_fechamento}" for ="diaFechamentoFaturaCartaoAltera"/>
+                <p:spinner id="diaFechamentoFaturaCartaoAltera"
+                           value="#{cartaoNavegacao.cartao.diaFechamentoFatura}" min="1"
+                           max="25" required="true" />
+                <p:message for ="diaFechamentoFaturaCartaoAltera" display="icon"/>
+
+
+                <h:outputLabel value="*#{msg.cartao_status}" for="statusCartaoAltera" />
+                <p:selectOneMenu id="statusCartaoAltera" value="#{cartaoNavegacao.statusItemSelecionado}">
+                    <f:selectItem itemValue="1" itemLabel="ativado" />
+                    <f:selectItem itemValue="2" itemLabel="desativado"/>
+                </p:selectOneMenu>
+                <p:message for="statusCartaoAltera" display="icon" />
+
+                <p:commandButton id="declineCartaoAlteracao" value="#{msg.botao_cancelar}"
+                                 onclick="alteracaoCartao.hide()" type="button" />
+
+                <p:commandButton id="confirmCartaoAlteracao"
+                                 actionListener="#{cartaoNavegacaoControle.alterar}" value="#{msg.botao_salvar}"
+                                 process ="gridCartaoAltera" update=":formPrincipal:tabelaCartoes" oncomplete="alteracaoCartao.hide()">
+                </p:commandButton>
+
+            </h:panelGrid>
+      
+    </p:dialog>
+
+    <p:dialog id="excluiCartaoDialog" showEffect="slide" hideEffect="slide"
+                     header="#{msg.cartao_pane_apagar}" widgetVar="exclusaoCartao">
+        
+            <h:outputLabel value ="#{msg.cartao_msg_confirma_exclusao}?"/>
+            <br/>
+                
+            <h:panelGrid id ="gridCartaoApaga" columns="2">
+
+                <p:commandButton id="declineCartaoExclusao" value="#{msg.botao_cancelar}"
+                                 onclick="exclusaoCartao.hide()" type="button" process ="@this" />
+
+                <p:commandButton id="confirmCartaoExclusao"
+                                 actionListener="#{cartaoNavegacaoControle.apagar}" value="#{msg.botao_sim}"
+                                 process ="gridCartaoApaga" update=":formPrincipal:tabelaCartoes" oncomplete="exclusaoCartao.hide()">
+
+                </p:commandButton>
+
+
+            </h:panelGrid>
+     
+    </p:dialog>
+</ui:composition>

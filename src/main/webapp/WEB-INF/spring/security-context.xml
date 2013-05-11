@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<b:beans xmlns="http://www.springframework.org/schema/security"
+         xmlns:b="http://www.springframework.org/schema/beans"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+    <http>
+        <intercept-url pattern="/pages/restrito/**" access="ROLE_USUARIO" />
+        <form-login login-page="/pages/publico/login.jsf"
+                            always-use-default-target="true" default-target-url="/pages/restrito/principal.jsf"
+                            authentication-failure-url="/pages/publico/login.jsf?login_error=1" />
+        <logout logout-success-url="/login.jsf"/>
+        <remember-me />
+    </http>  
+	
+    <authentication-manager>
+        <authentication-provider>
+            <jdbc-user-service data-source-ref="jdbcSonolucro"
+                                           authorities-by-username-query="SELECT u.email, p.permissao 
+											 FROM usuario u, usuario_permissao p 
+											WHERE u.id = p.usuario 
+											  AND u.email = ?"
+                                           users-by-username-query="SELECT email, senha, status 
+									   FROM usuario 
+									  WHERE email = ? and status = true" />
+        </authentication-provider>
+    </authentication-manager>
+
+</b:beans>

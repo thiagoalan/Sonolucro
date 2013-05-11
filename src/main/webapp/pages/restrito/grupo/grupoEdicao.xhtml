@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id="editaGrupoDialog" header="#{msg.grupo_pane_editar}" 
+              widgetVar="alteracaoGrupo" showEffect="slide" hideEffect="slide">
+        
+        <h:panelGrid id ="gridGrupoAltera" columns="6" cellpadding="10">
+                <h:outputLabel value="*#{msg.grupo_nome}" for="nomeGrupoAltera" />
+                <p:inputText id="nomeGrupoAltera" value="#{grupoNavegacao.grupo.nome}"
+                             required="true" >
+                    <f:validateLength minimum="1" maximum="25" />
+                </p:inputText>
+                <p:message for ="nomeGrupoAltera" display ="icon"/>
+
+                <h:outputLabel value ="#{msg.grupo_status}" for ="selectStatusGrupoAltera"/>
+                <p:selectOneMenu id ="selectStatusGrupoAltera" value ="#{grupoNavegacao.statusItemSelecionado}" required ="true">
+                    <f:selectItems value ="#{grupoNavegacao.statusItens}"/>                   
+                </p:selectOneMenu>
+                
+                <p:message for ="selectStatusGrupoAltera" display="icon"/>
+
+                <p:commandButton id="declineAlteracaoGrupo"  value="#{msg.botao_cancelar}"
+                                 process ="@this" onclick="alteracaoGrupo.hide()" type="button" />
+
+                <p:commandButton id="confirmAlteracaoGrupo"
+                                 actionListener="#{grupoNavegacaoControle.alterar}" value="#{msg.botao_salvar}"
+                                 process ="gridGrupoAltera" update=":formPrincipal:tabelaGrupos" oncomplete="alteracaoGrupo.hide()" >
+                </p:commandButton>
+
+            </h:panelGrid>
+    </p:dialog>
+
+    <p:dialog id="excluiGrupoDialog" showEffect="slide" hideEffect="slide"
+              header="#{msg.grupo_pane_apagar}" widgetVar="exclusaoGrupo">
+      
+
+            <h:outputLabel value ="#{msg.grupo_msg_confirma_exclusao}?"/>
+            <br/>
+            <h:panelGrid id ="gridGrupoApaga" columns="2">
+                <p:commandButton id="declineExclusao"  value="#{msg.botao_cancelar}" type="button"
+                                 process ="@this" onclick="exclusaoGrupo.hide()" ajax ="true"/>
+
+                <p:commandButton id="confirmExclusao" process ="@this" ajax ="true"
+                                 actionListener="#{grupoNavegacaoControle.apagar}" value="#{msg.botao_sim}"
+                                 update=":formPrincipal:tabelaGrupos" oncomplete="exclusaoGrupo.hide()" >
+
+                </p:commandButton>
+            </h:panelGrid>
+    </p:dialog>
+</ui:composition>

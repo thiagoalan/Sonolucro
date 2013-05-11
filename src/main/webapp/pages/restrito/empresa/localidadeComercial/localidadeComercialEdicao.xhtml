@@ -1,0 +1,181 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/sonolucroTemplateInterno.xhtml">
+
+    <ui:define name ="corpo">
+        <h:form id ="formPrincipal">
+
+            <h:panelGrid id ="gridLocalidadeComercialEdicao" columns ="1" style ="width:100%">
+
+                <p:fieldset id="fieldsetLocalidadeComercialEdicao" legend="#{msg.localidade_comercial_cadastro_localidade_comercial}"
+                            toggleable="true" toggleSpeed="500">
+
+                    <p:messages id ="messageLocalidadeComercialEdicao" autoUpdate="true" severity="info, error"/>
+
+                    <h:panelGrid id ="gridLocalidadeComercialAltera" columns ="6">
+
+                        <h:outputLabel value ="#{msg.localidade_comercial_nome}" for ="nomeLocalidadeComercialAltera"/>
+                        <p:inputText id ="nomeLocalidadeComercialAltera" 
+                                     value ="#{localidadeComercialNavegacao.localidadeComercial.nome}"
+                                     required ="true" maxlength="50"/>
+                        <p:message for ="nomeLocalidadeComercialAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.localidade_comercial_longitude}" for ="longitudeLocalidadeComercialAltera"/>
+                        <p:inputText id ="longitudeLocalidadeComercialAltera" 
+                                     value="#{localidadeComercialNavegacao.localidadeComercial.longitude}"
+                                     required ="true" maxlength="15"/>
+                        <p:message for ="longitudeLocalidadeComercialAltera"/>
+
+                        <h:outputLabel value="#{msg.localidade_comercial_latitude}" for ="latitudeLocalidadeComercialAltera"/>
+                        <p:inputText id ="latitudeLocalidadeComercialAltera" 
+                                     value ="#{localidadeComercialNavegacao.localidadeComercial.latitude}"
+                                     required ="true" maxlength="15"/>
+                        <p:message for ="latitudeLocalidadeComercialAltera"/>
+
+                        <h:outputLabel value ="#{msg.localidade_comercial_localidade}" for ="gridLocalidadeLocalidadeComercialAltera"/>
+
+                        <h:panelGrid id ="gridLocalidadeLocalidadeComercialAltera" columns ="1">
+                            <h:outputLabel value ="#{msg.localidade_comercial_pais}" for ="paisLocalidadeComercialAltera"/>
+                            <p:selectOneMenu id ="paisLocalidadeComercialAltera" value ="#{localidadeComercialNavegacao.paisItemSelecionado}">
+                                <f:selectItem itemValue ="0" itemLabel=""/>
+                                <f:selectItems value ="#{localidadeComercialNavegacao.paisesItem}"/>
+                                <p:ajax listener="#{localidadeComercialNavegacaoControle.iniciarEstados}" process="@this" 
+                                        update =":formPrincipal:estadoLocalidadeComercialAltera"/>
+                            </p:selectOneMenu>
+                            <p:message for ="paisLocalidadeComercialAltera" display="icon"/>
+
+                            <h:outputLabel value ="#{msg.localidade_comercial_estado}" for ="estadoLocalidadeComercialAltera"/>
+                            <p:selectOneMenu id ="estadoLocalidadeComercialAltera" value ="#{localidadeComercialNavegacao.estadoItemSelecionado}">
+                                <f:selectItem itemValue ="0" itemLabel =""/>
+                                <f:selectItems value ="#{localidadeComercialNavegacao.estadosItem}"/>
+                                <p:ajax listener = "#{localidadeComercialNavegacaoControle.iniciarCidades}" process ="@this" 
+                                        update =":formPrincipal:cidadeLocalidadeComercialAltera"/>
+                            </p:selectOneMenu>
+                            <p:message for ="estadoLocalidadeComercialAltera" display="icon"/>
+
+                            <h:outputLabel value ="#{msg.localidade_comercial_cidade}" for ="cidadeLocalidadeComercialAltera"/>
+                            <p:selectOneMenu id ="cidadeLocalidadeComercialAltera" value ="#{localidadeComercialNavegacao.cidadeItemSelecionado}">
+                                <f:selectItem itemValue ="0" itemLabel=""/>
+                                <f:selectItems value ="#{localidadeComercialNavegacao.cidadesItem}"/>
+                            </p:selectOneMenu>
+                            <p:message for ="cidadeLocalidadeComercialAltera" display="icon"/>
+                        </h:panelGrid>
+                        <p:message for ="gridLocalidadeLocalidadeComercialAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.localidade_comercial_cep}" for ="cepLocalidadeComercialAltera"/>
+                        <p:inputText id ="cepLocalidadeComercialAltera" value ="#{localidadeComercialNavegacao.localidadeComercial.cep}"
+                                     maxlength="12"/>
+                        <p:message for ="cepLocalidadeComercialAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.localidade_comercial_bairro}" for ="bairroLocalidadeComercialAltera"/>
+                        <p:inputText id ="bairroLocalidadeComercialAltera" 
+                                     value ="#{localidadeComercialNavegacao.localidadeComercial.bairro}"
+                                     required ="true" maxlength="30"/>
+                        <p:message for ="bairroLocalidadeComercialAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.localidade_comercial_rua}" for ="ruaLocalidadeComercialAltera"/>
+                        <p:inputText id ="ruaLocalidadeComercialAltera"
+                                     value ="#{localidadeComercialNavegacao.localidadeComercial.rua}"
+                                     required ="true" maxlength="30"/>
+                        <p:message for ="ruaLocalidadeComercialAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.localidade_comercial_numero}" for ="numeroLocalidadeComercialAltera"/>
+                        <p:inputText id ="numeroLocalidadeComercialAltera" value ="#{localidadeComercialNavegacao.localidadeComercial.numero}" 
+                                     maxlength="10"/>
+                        <p:message for ="numeroLocalidadeComercialAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.localidade_comercial_complemento}" for ="complementoLocalidadeComercialAltera"/>
+                        <p:inputText id ="complementoLocalidadeComercialAltera" value ="#{localidadeComercialNavegacao.localidadeComercial.complemento}"
+                                     maxlength="12"/>
+                        <p:message for ="complementoLocalidadeComercialAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.localidade_comercial_telefone}" for ="telefoneLocalidadeComercialAltera"/>
+                        <p:inputText id ="telefoneLocalidadeComercialAltera" value ="#{localidadeComercialNavegacao.localidadeComercial.telefone}"
+                                     maxlength="30"/>
+                        <p:message for ="telefoneLocalidadeComercialAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.localidade_comercial_site}" for ="siteLocalidadeComercialAltera"/>
+                        <p:inputText id ="siteLocalidadeComercialAltera" value="#{localidadeComercialNavegacao.localidadeComercial.site}"
+                                     maxlength="30"/>
+                        <p:message for ="siteLocalidadeComercialAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.localidade_comercial_email}" for ="emailLocalidadeComercialAltera"/>
+                        <p:inputText id ="emailLocalidadeComercialAltera" value ="#{localidadeComercialNavegacao.localidadeComercial.email}"
+                                     maxlength="30"/>
+                        <p:message for="emailLocalidadeComercialAltera" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.localidade_comercial_descricao}" for ="descricaoLocalidadeComercialAltera"/>
+                        <h:panelGrid columns = "1">
+                            <p:inputTextarea id="descricaoLocalidadeComercialAltera" rows="5" cols="30" 
+                                             value="#{localidadeComercialNavegacao.localidadeComercial.descricao}"
+                                             counter="counterDescricaoLocalidadeComercialAltera" maxlength="200"       
+                                             counterTemplate="{0} #{msg.mensagem_texto_area}"
+                                             autoResize="false"/>  
+                            <h:outputText id="counterDescricaoLocalidadeComercialAltera" />
+                        </h:panelGrid>  
+                        <p:message for ="descricaoLocalidadeComercialAltera" display="icon"/>
+
+
+                        <h:outputLabel value ="#{msg.localidade_comercial_responsaveis}" for ="dataGridResponsaveisLocalidadeComercialAltera"/>
+                        <p:dataGrid id ="dataGridResponsaveisLocalidadeComercialAltera" 
+                                    value="#{localidadeComercialNavegacao.responsaveisSelecionados}" var ="responsavel" 
+                                    columns ="1" emptyMessage="#{msg.empresa_msg_sem_responsavel_selecionado}" 
+                                    rows="2" paginator="true" pageLinks="2">
+                            <f:facet name ="header">
+                                <p:commandButton id ="linkResponsavelLocalidadeComercialAltera" value =" + "  
+                                                 onclick="modalResponsavelLocalidadeComercial.show()" 
+                                                 process ="@this"
+                                                 update =":formPrincipal:tabelaPesquisaResponsavelLocalidadeComercial">
+                                </p:commandButton>
+                            </f:facet>
+
+                            <p:column>
+                                <p:commandButton id ="linkRemoverResponsavelLocalidadeComercialAltera" value =" - "
+                                                 actionListener ="#{localidadeComercialNavegacaoControle.removerResponsavelSelecionado}"
+                                                 process ="@this" update ="dataGridResponsaveisLocalidadeComercialAltera">
+                                    <f:attribute name="responsavel" value ="#{responsavel}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                            <p:column>
+                                <h:outputLabel value ="#{responsavel.nome}"/>
+                            </p:column>
+                        </p:dataGrid>
+                        <p:message for ="dataGridResponsaveisLocalidadeComercialAltera" display="icon"/>
+
+
+                        <h:outputLabel value ="#{msg.localidade_comercial_empresa}" for ="empresaLocalidadeComercialAltera"/>
+                        <h:panelGrid id ="empresaLocalidadeComercialAltera" columns ="2">
+                            <p:commandLink value ="#{localidadeComercialNavegacao.empresaStr}" process ="@this"
+                                           onclick = "modalEmpresa.show()"/>
+
+                        </h:panelGrid>
+                        <p:message for ="empresaLocalidadeComercialAltera" display="icon"/>
+
+                        <h:outputLabel/>
+                        <h:outputLabel/>
+                        <h:outputLabel/>
+
+                        <p:commandButton value ="#{msg.botao_voltar}" 
+                                         action ="#{localidadeComercialNavegacaoControle.irParaTelaLocalidadeComercial}"
+                                         process ="@this"/>
+
+                        <p:commandButton value ="#{msg.botao_salvar}" 
+                                         actionListener ="#{localidadeComercialNavegacaoControle.alterar}" 
+                                         process ="gridLocalidadeComercialEdicao" 
+                                         update ="gridLocalidadeComercialEdicao"/>
+
+                    </h:panelGrid>
+
+                </p:fieldset>
+            </h:panelGrid>        
+
+            <ui:include src = "/pages/restrito/empresa/localidadeComercial/modalEmpresas.xhtml"/>
+            <ui:include src = "/pages/restrito/empresa/localidadeComercial/modalResponsavelLocalidadeComercial.xhtml"/>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

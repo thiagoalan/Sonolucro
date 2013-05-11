@@ -1,0 +1,76 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:sec="http://www.springframework.org/security/tags">
+
+    <p:slideMenu id ="menuPrincipal" backLabel="#{msg.botao_voltar}">
+        <p:menuitem id ="menuitemHome" value ="#{msg.menu_home}" action ="#{indexNavegacaoControle.irParaTelaPrincipal}" 
+                    process ="@this" update =":formPrincipal" ajax="false"/>
+
+        <p:menuitem id="menuitemGrupo" value ="#{msg.menu_grupo}" action ="#{grupoNavegacaoControle.irParaTelaGrupo}" 
+                    process ="@this" update =":formPrincipal" ajax="false"/>
+
+        <p:submenu label ="#{msg.menu_conta}">
+            <p:menuitem id="menuitemConta" value ="#{msg.menu_conta}" action ="#{contaNavegacaoControle.irParaTelaConta}"
+                        process ="@this" update =":formPrincipal" ajax="false"/>
+            <p:menuitem id ="menuitemGraficoConta" value ="#{msg.conta_grafico_conta}" ajax ="false"
+                        action ="#{contaNavegacaoControle.irParaTelaGraficoConta}" process ="@this" update =":formPrincipal"/>
+        </p:submenu>
+
+        <p:menuitem id ="menuitemCartao" value ="#{msg.menu_cartao}" action ="#{cartaoNavegacaoControle.irParaTelaCartao}" 
+                    process ="@this" update =":formPrincipal" ajax="false"/>
+
+        <p:submenu label ="#{msg.menu_movimentacao}">
+            <p:menuitem id="menuitemMovimentacoes" value ="#{msg.menu_movimentacoes}" 
+                        action ="#{movimentacaoNavegacaoControle.irParaTelaMovimentacao}" 
+                        ajax="false"/>
+            <p:menuitem id="menuitemGraficoMovimentacoes" value ="#{msg.movimentacao_grafico_movimentacao}" 
+                        action ="#{movimentacaoNavegacaoControle.irParaTelaGrafico}"
+                        ajax="false"/>
+        </p:submenu>
+        
+        <p:menuitem value ="#{msg.menu_objetivo}" action="#{objetivoNavegacaoControle.irParaTelaObjetivo}" ajax ="false"/>
+        
+        <!--
+        <p:menuitem id="menuitemRelatorios" value ="#{msg.menu_relatorios}" 
+                    action ="#{relatorioNavegacaoControle.irParaTelaRelatorio}" 
+                    process ="@this" update =":formPrincipal" ajax="false"/>
+        -->
+        
+        <p:submenu label = "#{msg.menu_configuracao}">
+            <p:menuitem id="menuitemusuario" value = "#{beanUtil.usuarioLogado.nome}"
+                        action = "#{usuarioNavegacaoControle.irParaTelaUsuarioEdicao}" 
+                        process ="@this" update =":formPrincipal" ajax="false"/>
+           <!-- <p:menuitem id="menuitemsistema" value = "#{msg.menu_sistema}" process ="@this"/> -->	
+        </p:submenu>	
+
+        <p:submenu label ="#{msg.menu_administracao}" rendered="#{beanUtil.permissao}">
+            <p:menuitem id ="menuDicas" value="#{msg.menu_dica}" action ="#{dicaNavegacaoControle.irParaTelaDica}"
+                        process ="@this" update =":formPrincipal" ajax="false"/>
+            <p:submenu label ="#{msg.menu_empresas}">
+                <p:menuitem id ="menuEmpresas" value="#{msg.menu_empresas}" 
+                            action ="#{empresaNavegacaoControle.irParaTelaEmpresa}" 
+                            process ="@this" update =":formPrincipal" ajax="false"/>
+
+                <p:menuitem id ="menuLocalidadeComercial" value ="#{msg.menu_localidade_comercial}"
+                            ajax ="false" action ="#{localidadeComercialNavegacaoControle.irParaTelaLocalidadeComercial}"/>
+
+                <p:menuitem id="menuResponsavelEmpresa" value="#{msg.menu_responsavel_empresa}" 
+                            action ="#{responsavelEmpresaNavegacaoControle.irParaTelaResponsavelEmpresa}"
+                            process ="@this" update =":formPrincipal"/>
+            </p:submenu>
+            
+            <p:menuitem id ="menuUsuarios" value="#{msg.menu_usuarios}" ajax ="false"
+                        action ="#{usuarioNavegacaoControle.irParaTelaUsuarioPesquisa}"/>
+            
+        </p:submenu>   
+
+      <p:menuitem id="menuitemLogout" value = "#{msg.menu_sair}" action = "#{usuarioNavegacaoControle.logout}" 
+                  ajax ="false"/>
+
+    </p:slideMenu>
+
+
+</ui:composition>    

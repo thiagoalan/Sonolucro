@@ -1,0 +1,215 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/sonolucroTemplateInterno.xhtml">
+
+    <ui:define name ="corpo">
+        <h:form id ="formPrincipal">
+            <h:panelGrid id ="gridEmpresaPrincipal" columns ="1" style ="width:100%">
+                <p:fieldset id="fieldsetEmpresa" legend="#{msg.empresa_cadastro_empresa}" toggleable="true" toggleSpeed="500">
+
+                    <p:messages id ="messageCadastroEmpresa" autoUpdate="true" severity="info, error" closable="true"/>
+
+                    <h:panelGrid id ="gridEmpresaCadastro" columns ="6" cellspacing="10">
+
+
+                        <h:outputLabel value ="#{msg.empresa_nome_fantasia}" for="nomeFantasiaEmpresa"/>
+                        <p:inputText id ="nomeFantasiaEmpresa" value ="#{empresaNavegacao.empresa.nomeFantasia}" required ="true"/>
+                        <p:message for ="nomeFantasiaEmpresa" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_cnpj}" for ="cnpjEmpresa"/>
+                        <p:inputText id ="cnpjEmpresa" value ="#{empresaNavegacao.empresa.cnpj}"/>
+                        <p:message for ="cnpjEmpresa" display ="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_tipo}" for ="tipoEmpresa"/>
+                        <p:selectOneMenu id ="tipoEmpresa" value ="#{empresaNavegacao.tipoItemSelecionado}">
+                            <f:selectItem itemValue ="0" itemLabel =""/>
+                            <f:selectItems value ="#{empresaNavegacao.tiposItem}"/>
+                        </p:selectOneMenu>
+                        <p:message for ="tipoEmpresa" display ="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_descricao}" for ="descricaoEmpresa"/>
+                        <h:panelGrid columns = "1">
+                            <p:inputTextarea id="descricaoEmpresa" rows="5" cols="30" 
+                                             value="#{empresaNavegacao.empresa.descricao}"
+                                             counter="counterDescricaoEmpresa" maxlength="200"       
+                                             counterTemplate="{0} #{msg.mensagem_texto_area}"
+                                             autoResize="false" />  
+                            <h:outputText id="counterDescricaoEmpresa" />
+                        </h:panelGrid>  
+                        <p:message for ="descricaoEmpresa" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_e_cliente}" for ="nossoClienteEmpresa"/>
+                        <p:selectOneMenu id ="nossoClienteEmpresa" value ="#{empresaNavegacao.nossoClienteItemSelecionado}">
+                            <f:selectItem itemValue ="0" itemLabel =""/>
+                            <f:selectItem itemValue ="1" itemLabel ="#{msg.empresa_e_cliente_sim}"/>
+                            <f:selectItem itemValue ="2" itemLabel ="#{msg.empresa_e_cliente_nao}"/>
+                        </p:selectOneMenu>
+                        <p:message for ="nossoClienteEmpresa" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_telefone}" for ="telefoneEmpresa"/>
+                        <p:inputText id ="telefoneEmpresa" value ="#{empresaNavegacao.empresa.telefone}"/>
+                        <p:message for ="telefoneEmpresa" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_email}" for ="emailEmpresa"/>
+                        <p:inputText id ="emailEmpresa" value ="#{empresaNavegacao.empresa.email}"/>
+                        <p:message for ="emailEmpresa" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_localidade}" for ="gridLocalidadeEmpresa"/>
+
+                        <h:panelGrid id ="gridLocalidadeEmpresa" columns ="1">
+                            <h:outputLabel value ="#{msg.empresa_pais}" for ="paisEmpresa"/>
+                            <p:selectOneMenu id ="paisEmpresa" value ="#{empresaNavegacao.paisItemSelecionado}">
+                                <f:selectItem itemValue ="0" itemLabel=""/>
+                                <f:selectItems value ="#{empresaNavegacao.paisesItem}"/>
+                                <p:ajax listener="#{empresaNavegacaoControle.iniciarEstados}" process="@this" 
+                                        update =":formPrincipal:estadoEmpresa"/>
+                            </p:selectOneMenu>
+                            <p:message for ="paisEmpresa" display="icon"/>
+
+                            <h:outputLabel value ="#{msg.empresa_estado}" for ="estadoEmpresa"/>
+                            <p:selectOneMenu id ="estadoEmpresa" value ="#{empresaNavegacao.estadoItemSelecionado}">
+                                <f:selectItem itemValue ="0" itemLabel =""/>
+                                <f:selectItems value ="#{empresaNavegacao.estadosItem}"/>
+                                <p:ajax listener = "#{empresaNavegacaoControle.iniciarCidades}" process ="@this" 
+                                        update =":formPrincipal:cidadeEmpresa"/>
+                            </p:selectOneMenu>
+                            <p:message for ="estadoEmpresa" display="icon"/>
+
+                            <h:outputLabel value ="#{msg.empresa_cidade}" for ="cidadeEmpresa"/>
+                            <p:selectOneMenu id ="cidadeEmpresa" value ="#{empresaNavegacao.cidadeItemSelecionado}">
+                                <f:selectItem itemValue ="0" itemLabel=""/>
+                                <f:selectItems value ="#{empresaNavegacao.cidadesItem}"/>
+                            </p:selectOneMenu>
+                            <p:message for ="cidadeEmpresa" display="icon"/>
+                        </h:panelGrid>
+
+                        <p:message for ="gridLocalidadeEmpresa" display="icon"/>
+
+                        <h:outputLabel value ="#{msg.empresa_pessoa_responsavel}" for ="dataGridResponsaveisEmpresa"/>
+
+                        <p:dataGrid id ="dataGridResponsaveisEmpresa" value="#{empresaNavegacao.responsaveisSelecionados}" var ="responsavel" 
+                                    columns ="1" emptyMessage="#{msg.empresa_msg_sem_responsavel_selecionado}" rows="2" paginator="true" pageLinks="2">
+                            <f:facet name ="header">
+                                <p:commandButton id ="linkResponsavelEmpresa" value =" + "  
+                                                 onclick="modalResponsavelEmpresa.show()" 
+                                                 process ="@this"
+                                                 update =":formPrincipal:tabelaPesquisaResponsavelEmpresa">
+                                </p:commandButton>
+                            </f:facet>
+
+                            <p:column>
+                                <p:commandButton id ="linkRemoverResponsavelEmpresa" value =" - "
+                                                 actionListener ="#{empresaNavegacaoControle.removerResponsavelEmpresa}"
+                                                 process ="@this" update ="dataGridResponsaveisEmpresa">
+                                    <f:attribute name="responsavel" value ="#{responsavel}"/>
+                                </p:commandButton>
+                            </p:column>
+
+                            <p:column>
+                                <h:outputLabel value ="#{responsavel.nome}"/>
+                            </p:column>
+                        </p:dataGrid>
+
+                        <p:message for ="dataGridResponsaveisEmpresa" display ="icon"/>
+
+                        <h:outputLabel value ="*#{msg.empresa_status}" for ="statusEmpresa"/>
+
+                        <p:selectOneMenu id ="statusEmpresa" value ="#{empresaNavegacao.statusItemSelecionado}" required ="true">
+                            <f:selectItem itemValue ="1" itemLabel ="#{msg.empresa_status_ativada}"/>
+                            <f:selectItem itemValue ="2" itemLabel ="#{msg.empresa_status_desativada}"/>
+                        </p:selectOneMenu>
+
+                        <p:message for ="statusEmpresa" display="icon"/>
+
+                        <h:outputLabel/>
+                        <h:outputLabel/>
+                        <h:outputLabel/>
+
+                        <p:commandButton value ="#{msg.botao_salvar}" 
+                                         process ="formPrincipal:gridEmpresaCadastro"
+                                         update ="formPrincipal:gridEmpresaPrincipal"
+                                         actionListener ="#{empresaNavegacaoControle.salvar}"/>
+                    </h:panelGrid>
+
+                </p:fieldset>
+
+                <p:separator/>
+
+                <p:dataTable id ="tabelaEmpresas" value ="#{empresaNavegacao.empresas}" 
+                             var ="empresa" paginator ="true" emptyMessage="#{msg.tabela_msg_vazia}">
+                    <f:facet name ="header">
+                        <h:outputLabel value ="#{msg.empresa_titulo_tabela}"/>
+                    </f:facet>
+
+                    <p:column style="text-align: center;" headerText="#{msg.empresa_nome_fantasia}"
+                              filterBy="#{empresa.nomeFantasia}">
+                        <h:outputLabel value ="#{empresa.nomeFantasia}"/>
+                    </p:column>
+
+                    <p:column style="text-align: center;" 
+                              headerText="#{msg.empresa_cnpj}" filterBy="#{empresa.cnpj}">
+                        <h:outputLabel value ="#{empresa.cnpj}"/>
+                    </p:column>
+
+                    <p:column style="text-align: center;"
+                              headerText="#{msg.empresa_e_cliente}" filterBy="#{empresa.ECliente}" 
+                              filterMatchMode="exact">
+                        <h:outputLabel value ="#{empresa.ECliente eq 'true' ? msg.empresa_e_cliente_sim : msg.empresa_e_cliente_nao}"/>
+                    </p:column>
+
+                    <p:column style="text-align: center;" headerText="#{msg.empresa_responsavel}">
+                        <p:dataList value ="#{empresa.responsaveisPelaEmpresa}" var="responsavel">
+                            <h:outputText value="#{responsavel}"/>
+                        </p:dataList>
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">#{msg.tabela_coluna_editar}</f:facet>
+                        <p:commandLink action="#{empresaNavegacaoControle.irParaTelaEdicao}"
+                                       process ="@this" ajax="true">
+                            <f:attribute name ="empresa" value="#{empresa}"/>
+                            <h:graphicImage library="imagens" name="editar.jpg" width="15px"
+                                            height="15px" />
+
+                        </p:commandLink>
+
+                    </p:column>
+
+                    <p:column style="text-align: center;">
+                        <f:facet name="header">#{msg.tabela_coluna_apagar}</f:facet>
+                        <p:commandLink actionListener="#{empresaNavegacaoControle.preparaAlteracao}"
+                                       process ="@this" onclick="exclusaoEmpresa.show()" type="button" update =":formPrincipal:gridEmpresaApaga">
+                            <f:attribute name ="empresa" value="#{empresa}"/>
+                            <h:graphicImage library="imagens" name="excluir.jpg" width="15px"
+                                            height="15px" />
+                        </p:commandLink>
+                    </p:column>
+
+                </p:dataTable>
+            </h:panelGrid>
+
+            <ui:include src ="/pages/restrito/empresa/empresa/modalResponsavelEmpresaPesquisa.xhtml"/>
+
+            <p:dialog id="excluiEmpresaDialog" showEffect="slide" hideEffect="slide"
+                      header="#{msg.empresa_exclusao}" widgetVar="exclusaoEmpresa">
+
+
+                <h:outputLabel value ="#{msg.empresa_msg_confirma_exclusao}?"/>
+                <br/>
+                <h:panelGrid id ="gridEmpresaApaga" columns="2">
+                    <p:commandButton  value="#{msg.botao_cancelar}" type="button"
+                                      process ="@this" onclick="exclusaoEmpresa.hide()"/>
+
+                    <p:commandButton process ="@this" 
+                                     actionListener="#{empresaNavegacaoControle.apagar}" value="#{msg.botao_sim}"
+                                     update="formPrincipal:tabelaEmpresas" oncomplete="exclusaoEmpresa.hide()" >
+
+                    </p:commandButton>
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
